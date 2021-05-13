@@ -37,22 +37,22 @@ public class BooleanTypeTest
 	@Test
 	public void testValueOf()
 	{
-		BooleanExp a = BooleanExp.of("false");
+		BooleanExp a = BooleanExp.valueOf("false");
 		assertFalse(a.getValue());
-		BooleanExp a1 = BooleanExp.of("true");
+		BooleanExp a1 = BooleanExp.valueOf("true");
 		assertTrue(a1.getValue());
 	}
 
 	@Test
 	public void fromToXacmlString()
 	{
-		BooleanExp v = BooleanExp.of("True");
+		BooleanExp v = BooleanExp.valueOf("True");
 		assertEquals(Boolean.TRUE, v.getValue());
-		v = BooleanExp.of("TRUE");
+		v = BooleanExp.valueOf("TRUE");
 		assertEquals(Boolean.TRUE, v.getValue());
-		v = BooleanExp.of("FALSE");
+		v = BooleanExp.valueOf("FALSE");
 		assertEquals(Boolean.FALSE, v.getValue());
-		v = BooleanExp.of("False");
+		v = BooleanExp.valueOf("False");
 		assertEquals(Boolean.FALSE, v.getValue());
 	}
 

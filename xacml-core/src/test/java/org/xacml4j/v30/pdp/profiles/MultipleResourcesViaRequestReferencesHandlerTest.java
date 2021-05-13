@@ -31,7 +31,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import org.easymock.Capture;
@@ -72,8 +74,8 @@ public class MultipleResourcesViaRequestReferencesHandlerTest
 				.entity(
 						Entity.builder()
 						.attribute(
-								Attribute.builder("testId1").value(StringExp.of("value0")).build(),
-								Attribute.builder("testId2").value(StringExp.of("value1")).build())
+								Attribute.builder("testId1").value(StringExp.valueOf("value0")).build(),
+								Attribute.builder("testId2").value(StringExp.valueOf("value1")).build())
 						.build())
 				.build();
 
@@ -83,8 +85,8 @@ public class MultipleResourcesViaRequestReferencesHandlerTest
 				.entity(
 						Entity.builder()
 						.attribute(
-								Attribute.builder("testId3").value(StringExp.of("value0")).build(),
-								Attribute.builder("testId4").value(StringExp.of("value1")).build())
+								Attribute.builder("testId3").value(StringExp.valueOf("value0")).build(),
+								Attribute.builder("testId4").value(StringExp.valueOf("value1")).build())
 						.build())
 				.build();
 
@@ -94,8 +96,8 @@ public class MultipleResourcesViaRequestReferencesHandlerTest
 				.entity(
 						Entity.builder()
 						.attribute(
-								Attribute.builder("testId3").value(StringExp.of("value0")).build(),
-								Attribute.builder("testId4").value(StringExp.of("value1")).build())
+								Attribute.builder("testId3").value(StringExp.valueOf("value0")).build(),
+								Attribute.builder("testId4").value(StringExp.valueOf("value1")).build())
 						.build())
 				.build();
 
@@ -105,8 +107,8 @@ public class MultipleResourcesViaRequestReferencesHandlerTest
 				.entity(
 						Entity.builder()
 						.attribute(
-						Attribute.builder("testId5").value(StringExp.of("value0")).build(),
-						Attribute.builder("testId6").value(StringExp.of("value1")).build())
+						Attribute.builder("testId5").value(StringExp.valueOf("value0")).build(),
+						Attribute.builder("testId6").value(StringExp.valueOf("value1")).build())
 						.build())
 				.build();
 
@@ -116,8 +118,8 @@ public class MultipleResourcesViaRequestReferencesHandlerTest
 				.entity(
 						Entity.builder()
 						.attribute(
-						Attribute.builder("testId7").value(StringExp.of("value0")).build(),
-						Attribute.builder("testId8").value(StringExp.of("value1")).build()).build())
+						Attribute.builder("testId7").value(StringExp.valueOf("value0")).build(),
+						Attribute.builder("testId8").value(StringExp.valueOf("value1")).build()).build())
 				.build();
 
 		RequestReference reference0 = RequestReference.builder()
@@ -133,13 +135,9 @@ public class MultipleResourcesViaRequestReferencesHandlerTest
 				.reference("resourceAttr1", "subjectAttr1")
 				.build();
 
-		RequestContext context = RequestContext
-				.builder()
-				.returnPolicyIdList(false)
-				.combineDecision(false)
-				.attributes(attr0, attr1, attr2, attr3, attr4)
-				.reference(reference0, reference1)
-				.build();
+		RequestContext context = new RequestContext(false, false,
+				Arrays.asList(attr0, attr1, attr2, attr3, attr4),
+				Arrays.asList(reference0, reference1));
 
 		Capture<RequestContext> c0 = new Capture<RequestContext>();
 		Capture<RequestContext> c1 = new Capture<RequestContext>();
@@ -161,7 +159,7 @@ public class MultipleResourcesViaRequestReferencesHandlerTest
 		assertEquals(2, context0.getAttributes().size());
 		assertEquals(1, context0.getAttributes(Categories.SUBJECT_ACCESS).size());
 		assertEquals(1, context0.getAttributes(Categories.RESOURCE).size());
-
+		
 		assertNotNull(context1.getOnlyEntity(Categories.SUBJECT_ACCESS).getAttributes("testId7"));
 		assertNotNull(context1.getOnlyEntity(Categories.SUBJECT_ACCESS).getAttributes("testId8"));
 		assertNotNull(context1.getOnlyEntity(Categories.RESOURCE).getAttributes("testId3"));
@@ -182,8 +180,8 @@ public class MultipleResourcesViaRequestReferencesHandlerTest
 				.entity(
 						Entity.builder()
 						.attribute(
-						Attribute.builder("testId3").value(StringExp.of("value0")).build(),
-						Attribute.builder("testId4").value(StringExp.of("value1")).build()).build())
+						Attribute.builder("testId3").value(StringExp.valueOf("value0")).build(),
+						Attribute.builder("testId4").value(StringExp.valueOf("value1")).build()).build())
 				.build();
 
 		Category attr1 = Category
@@ -192,15 +190,12 @@ public class MultipleResourcesViaRequestReferencesHandlerTest
 				.entity(
 						Entity.builder()
 						.attribute(
-						Attribute.builder("testId5").value(StringExp.of("value0")).build(),
-						Attribute.builder("testId6").value(StringExp.of("value1")).build()).build())
+						Attribute.builder("testId5").value(StringExp.valueOf("value0")).build(),
+						Attribute.builder("testId6").value(StringExp.valueOf("value1")).build()).build())
 				.build();
 
-		RequestContext request = RequestContext
-				.builder()
-				.returnPolicyIdList(false)
-				.attributes(attr0, attr1)
-				.build();
+		RequestContext request = new RequestContext(false,
+				Arrays.asList(attr0, attr1));
 
 		expect(pdp.requestDecision(request)).andReturn(
 				Result.indeterminate(Status.processingError().build()).build());
@@ -213,10 +208,8 @@ public class MultipleResourcesViaRequestReferencesHandlerTest
 	@Test
 	public void testWithEmptyRequest()
 	{
-		RequestContext context = RequestContext
-				.builder()
-				.returnPolicyIdList(false)
-				.build();
+		RequestContext context = new RequestContext(false,
+				Collections.<Category>emptyList());
 
 		Capture<RequestContext> c0 = new Capture<RequestContext>();
 

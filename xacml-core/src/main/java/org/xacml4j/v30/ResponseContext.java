@@ -24,14 +24,13 @@ package org.xacml4j.v30;
 
 import java.util.Collection;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public class ResponseContext
 {
-	private ImmutableList<Result> results;
+	private Collection<Result> results;
 
 	private ResponseContext(Builder builder){
 		this.results = builder.b.build();
@@ -52,7 +51,7 @@ public class ResponseContext
 
 	@Override
 	public String toString(){
-		return MoreObjects
+		return Objects
 				.toStringHelper(this)
 				.add("results", results)
 				.toString();
@@ -60,10 +59,13 @@ public class ResponseContext
 
 	@Override
 	public boolean equals(Object o){
-		if (o == this) {
+		if(o == this){
 			return true;
 		}
-		if (!(o instanceof ResponseContext)) {
+		if(o == null){
+			return false;
+		}
+		if(!(o instanceof ResponseContext)){
 			return false;
 		}
 		ResponseContext r = (ResponseContext)o;

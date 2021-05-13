@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import org.xacml4j.v30.EvaluationContext;
 import org.xacml4j.v30.MatchResult;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 
@@ -85,7 +84,8 @@ public class Target implements PolicyElement
 			}
 		}
 		if(log.isDebugEnabled()){
-			log.debug("Target match state=\"{}\"", state);
+			log.debug("Target " +
+					"match state=\"{}\"", state);
 		}
 		return state;
 	}
@@ -119,7 +119,7 @@ public class Target implements PolicyElement
 
 	@Override
 	public String toString(){
-		return MoreObjects
+		return Objects
 				.toStringHelper(this)
 				.add("AnyOf", matches)
 				.toString();
@@ -142,7 +142,6 @@ public class Target implements PolicyElement
 		 * Adds {@link MatchAnyOf} created from a given
 		 * array of {@link MatchAnyOf} instances
 		 * @param anyOfs an array of {@code MatchAnyOf} matches
-		 * @return current builder instance
 		 */
 		public Builder anyOf(Iterable<MatchAnyOf> anyOfs){
 			allAnyOf.addAll(anyOfs);

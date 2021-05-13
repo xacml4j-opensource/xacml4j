@@ -53,8 +53,8 @@ public final class RFC822Name implements Serializable
 	/**
 	 * This constant states that domain literals are allowed in the email address, e.g.:
 	 *
-	 * <p><tt>someone@[192.168.1.100]</tt> or <br>
-	 * <tt>john.doe@[23:33:A2:22:16:1F]</tt> or <br>
+	 * <p><tt>someone@[192.168.1.100]</tt> or <br/>
+	 * <tt>john.doe@[23:33:A2:22:16:1F]</tt> or <br/>
 	 * <tt>me@[my computer]</tt></p>
 	 *
 	 * <p>The RFC says these are valid email addresses, but most people don't like allowing them.
@@ -148,9 +148,7 @@ public final class RFC822Name implements Serializable
 	//if we're allowing quoted identifiers or not:
 	private static final String PATTERN_STRING;
 
-	private static final Pattern VALID_PATTERN;
-
-	private static final Pattern NAME_SPLITTER = Pattern.compile("@");
+	public static final Pattern VALID_PATTERN;
 
 	static {
 		if (ALLOW_QUOTED_IDENTIFIERS) {
@@ -163,15 +161,17 @@ public final class RFC822Name implements Serializable
 			VALID_PATTERN = Pattern.compile(PATTERN_STRING);
 		} catch(PatternSyntaxException e) {
 			LoggerFactory.getLogger(RFC822Name.class).error("Can not parse Email address pattern", e);
+			e.printStackTrace();
 			throw e;
 		}
 	}
 
-	private final String localPart;
-	private final String domainPart;
-	private final String fqName;
+	private String localPart;
+	private String domainPart;
+	private String fqName;
 
-	public RFC822Name(String localPart, String domainPart) {
+	public RFC822Name(String localPart,
+			String domainPart){
 		Preconditions.checkNotNull(localPart);
 		Preconditions.checkNotNull(domainPart);
 		this.domainPart = domainPart.toLowerCase();
@@ -211,10 +211,9 @@ public final class RFC822Name implements Serializable
 	public static RFC822Name parse(Object name){
 		Preconditions.checkNotNull(name);
 		String trimmedName = ((String)name).trim();
-		Preconditions.checkArgument(
-				VALID_PATTERN.matcher(trimmedName).matches(),
+		Preconditions.checkArgument(VALID_PATTERN.matcher(trimmedName).matches(),
 				"Given value=\"%s\" is invalid RFC822 name", trimmedName);
-		String [] parts = NAME_SPLITTER.split(trimmedName);
+		String [] parts = trimmedName.split("@");
 		return new RFC822Name(parts[0], parts[1]);
 	}
 
@@ -225,6 +224,9 @@ public final class RFC822Name implements Serializable
 
 	@Override
 	public boolean equals(Object o){
+		if (o == null) {
+			return false;
+		}
 		if(o == this){
 			return true;
 		}
@@ -232,7 +234,7 @@ public final class RFC822Name implements Serializable
 			return false;
 		}
 		RFC822Name n = (RFC822Name)o;
-		return n.localPart.equals(localPart) &&
-				n.domainPart.equals(domainPart);
+		return n.getLocalPart().equals(getLocalPart()) &&
+		n.getDomainPart().equalsIgnoreCase(getDomainPart());
 	}
 }

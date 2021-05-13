@@ -27,7 +27,6 @@ import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMultiset;
@@ -51,9 +50,8 @@ public final class BagOfAttributeExp
 {
 	private static final long serialVersionUID = -8197446176793438616L;
 
-	private final BagOfAttributeExpType type;
-	private final Multiset<AttributeExp> values;
-	private final int hashCode;
+	private BagOfAttributeExpType type;
+	private Multiset<AttributeExp> values;
 
 	/**
 	 * Constructs bag of attributes.
@@ -63,18 +61,24 @@ public final class BagOfAttributeExp
 	 */
 	BagOfAttributeExp(BagOfAttributeExpType type,
 			Iterable<AttributeExp> attributes){
-		for (AttributeExp attr : attributes) {
-			assertExpressionType(attr, type);
-		}
 		this.type = type;
-		this.values = ImmutableMultiset.copyOf(attributes);
-		this.hashCode = Objects.hashCode(type, values);
+		ImmutableMultiset.Builder<AttributeExp> b = ImmutableMultiset.builder();
+		for(AttributeExp attr: attributes){
+			Preconditions.checkArgument(
+					attr.getType().equals(type.getDataType()),
+					String.format("Only attributes of type=\"%s\" " +
+							"are allowed in this bag, given type=\"%s\"",
+					type.getDataType(), attr.getType()));
+			b.add(attr);
+		}
+		this.values = b.build();
+
 	}
 
 	private BagOfAttributeExp(Builder b){
 		this.type = b.bagType;
 		this.values = b.valuesBuilder.build();
-		this.hashCode = Objects.hashCode(type, values);
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -243,14 +247,16 @@ public final class BagOfAttributeExp
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).
+		return Objects.toStringHelper(this).
 		add("DataType", type.getDataType()).
 		add("Values", values).toString();
 	}
 
 	@Override
 	public int hashCode(){
-		 return hashCode;
+		 return Objects.hashCode(
+				type,
+				values);
 	}
 
 	/**
@@ -258,7 +264,7 @@ public final class BagOfAttributeExp
 	 * value from a given bag
 	 *
 	 * @param <T> attribute expression type
-	 * @param v a bag of values
+	 * @param v a bag og values
 	 * @return a single value or {@code null}
 	 * if a given bag is {@code null} or empty
 	 */
@@ -283,14 +289,6 @@ public final class BagOfAttributeExp
 		void visitLeave(BagOfAttributeExp v);
 	}
 
-	private static void assertExpressionType(AttributeExp value, BagOfAttributeExpType bagType) {
-		if (!value.getType().equals(bagType.getDataType())) {
-			throw new IllegalArgumentException(String.format(
-					"Given attribute value=\"%s\" " +
-							"can't be used as a value of bag=\"%s\"", value, bagType));
-		}
-	}
-
 	public static class Builder
 	{
 
@@ -303,7 +301,11 @@ public final class BagOfAttributeExp
 
 		public Builder attribute(AttributeExp ...values){
 			for(AttributeExp v : values){
-				assertExpressionType(v, bagType);
+				if(!v.getType().equals(bagType.getDataType())){
+					throw new IllegalArgumentException(String.format(
+							"Given attribute value=\"%s\" " +
+							"can't be used as a value of bag=\"%s\"", v, bagType));
+				}
 				this.valuesBuilder.add(v);
 			}
 			return this;
@@ -311,23 +313,27 @@ public final class BagOfAttributeExp
 
 		public Builder value(Object ...values){
 			for(Object v : values){
-				this.valuesBuilder.add(bagType.getDataType().of(v));
+				this.valuesBuilder.add(bagType.getDataType().create(v));
 			}
 			return this;
 		}
 
 		public Builder values(Iterable<Object> values){
 			for(Object v : values){
-				this.valuesBuilder.add(bagType.getDataType().of(v));
+				this.valuesBuilder.add(bagType.getDataType().create(v));
 			}
 			return this;
 		}
 
 		public Builder attributes(Iterable<AttributeExp> values){
-			for (AttributeExp v : values) {
-				assertExpressionType(v, bagType);
+			for(AttributeExp v : values){
+				if(!v.getType().equals(bagType.getDataType())){
+					throw new IllegalArgumentException(String.format(
+							"Given attribute value=\"%s\" " +
+							"can't be used as a value of bag=\"%s\"", v, bagType));
+				}
+				this.valuesBuilder.add(v);
 			}
-			this.valuesBuilder.addAll(values);
 			return this;
 		}
 

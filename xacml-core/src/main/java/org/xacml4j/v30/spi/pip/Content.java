@@ -26,7 +26,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xacml4j.util.DOMUtil;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Ticker;
@@ -62,10 +61,10 @@ public final class Content
 
 	@Override
 	public String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("id", d.getId())
-		                  .add("content", DOMUtil.toString((Element)content))
-		                  .toString();
+		return Objects.toStringHelper(this)
+		.add("id", d.getId())
+		.add("content", DOMUtil.toString((Element)content))
+		.toString();
 	}
 
 	public static class Builder
@@ -74,13 +73,13 @@ public final class Content
 		private ContentResolverDescriptor d;
 		private Node content;
 
-		public Builder content(Node node) {
-			Preconditions.checkNotNull(node);
+		public Builder content(Node node){
+			Preconditions.checkNotNull(content);
 			this.content = node;
 			return this;
 		}
 
-		public Builder ticker(Ticker ticker) {
+		public Builder ticker(Ticker ticker){
 			this.ticker = ticker;
 			return this;
 		}

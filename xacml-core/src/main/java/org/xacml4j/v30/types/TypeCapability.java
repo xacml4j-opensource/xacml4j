@@ -45,7 +45,7 @@ public interface TypeCapability
 	 * 
 	 * @author Giedrius Trumpickas
 	 *
-	 * @param <T> {@link TypeCapability} subclass
+	 * @param <T>
 	 */
 	public class Index<T extends TypeCapability>
 	{

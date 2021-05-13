@@ -98,14 +98,14 @@ class DefaultResolverRegistry implements ResolverRegistry
 	{
 		AttributeResolverDescriptor d = resolver.getDescriptor();
 		Preconditions.checkArgument(!attributeResolversById.containsKey(d.getId()),
-				"Attribute resolver with id=\"%s\" is already registered with this registry", d.getId());
-		Lock lock = attributeResolverRWLock.writeLock();
+				"Attribute resolver with id=\"{}\" is already registered with this registry", d.getId());
+		Lock lock =  attributeResolverRWLock.writeLock();
 		try
 		{
 			if(!lock.tryLock(maxWriteLockWait, timeToWaitUnits)){
 				if(log.isWarnEnabled()){
 					log.warn("Failed to acquire write lock in=\"{}\" {}",
-							maxWriteLockWait, timeToWaitUnits);
+							maxWriteLockWait, timeToWaitUnits.toString());
 				}
 				return;
 			}
@@ -287,8 +287,9 @@ class DefaultResolverRegistry implements ResolverRegistry
 				return;
 			}
 			Lock lock  = scopedAttributeResolverRWLock.readLock();
-			lock.lock();
-			try {
+			try
+			{
+				lock.lock();
 				Collection<AttributeResolver> byPolicyId = scopedAttributeResolvers.get(policyId);
 				if(log.isDebugEnabled()){
 					log.debug("Found \"{}\" resolver " +
@@ -299,7 +300,8 @@ class DefaultResolverRegistry implements ResolverRegistry
 					AttributeResolverDescriptor d = r.getDescriptor();
 					if(d.canResolve(ref)){
 						if(log.isDebugEnabled()){
-							log.debug("Found PolicyId=\"{}\" scoped resolver for reference=\"{}\"",
+							log.debug("Found PolicyId=\"{}\" " +
+									"scoped resolver for reference=\"{}\"",
 									policyId, ref);
 						}
 						found.add(r);

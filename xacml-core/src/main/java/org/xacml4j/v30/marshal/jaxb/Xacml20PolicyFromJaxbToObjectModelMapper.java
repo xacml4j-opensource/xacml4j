@@ -103,16 +103,16 @@ import com.google.common.collect.ImmutableMap;
 
 public class Xacml20PolicyFromJaxbToObjectModelMapper extends PolicyUnmarshallerSupport
 {
-	private static final Map<String, Categories> designatorMappings = ImmutableMap.of(
+	private final static Map<String, Categories> designatorMappings = ImmutableMap.of(
 			"ResourceAttributeDesignator",	Categories.RESOURCE,
 			"ActionAttributeDesignator", Categories.ACTION,
 			"EnvironmentAttributeDesignator", Categories.ENVIRONMENT);
 
-	private static final Map<EffectType, Effect> v20ToV30EffectMapping = ImmutableMap.of(
+	private final static Map<EffectType, Effect> v20ToV30EffectMapping = ImmutableMap.of(
 			EffectType.DENY, Effect.DENY,
 			EffectType.PERMIT, Effect.PERMIT);
 
-	private static final TypeCapability.Index<TypeToXacml30> INDEX = TypeCapability.Index.<TypeToXacml30>build(TypeToXacml30.Types.values());
+	private final static TypeCapability.Index<TypeToXacml30> INDEX = TypeCapability.Index.<TypeToXacml30>build(TypeToXacml30.Types.values());
 
 	public Xacml20PolicyFromJaxbToObjectModelMapper(
 			FunctionProvider functions,
@@ -120,12 +120,14 @@ public class Xacml20PolicyFromJaxbToObjectModelMapper extends PolicyUnmarshaller
 		super(functions, decisionAlgorithms);
 	}
 
-	public CompositeDecisionRule create(Object o) throws XacmlSyntaxException
+	public CompositeDecisionRule create(Object o)
+		throws XacmlSyntaxException
 	{
-		if (o instanceof PolicyType) {
-			return createPolicy((PolicyType) o);
-		} else if (o instanceof PolicySetType) {
-			return createPolicySet((PolicySetType) o);
+		if(o instanceof PolicyType){
+			return createPolicy((PolicyType)o);
+		}
+		if(o instanceof PolicySetType){
+			return createPolicySet((PolicySetType)o);
 		}
 		throw new XacmlSyntaxException(
 				"Given object can not be mapped to Policy or PolicySet");
@@ -133,7 +135,7 @@ public class Xacml20PolicyFromJaxbToObjectModelMapper extends PolicyUnmarshaller
 
 	public Policy createPolicy(PolicyType p) throws XacmlSyntaxException
 	{
-		try {
+		try{
 			VariableManager<JAXBElement<?>> m = getVariables(p);
 			Map<String, VariableDefinition> variableDefinitions = m.getVariableDefinitions();
 			return Policy
@@ -147,7 +149,7 @@ public class Xacml20PolicyFromJaxbToObjectModelMapper extends PolicyUnmarshaller
 					.vars(variableDefinitions.values())
 					.obligation(getObligations(p.getObligations()))
 					.build();
-		} catch (IllegalArgumentException e) {
+		}catch(IllegalArgumentException e){
 			throw new XacmlSyntaxException(e);
 		}
 	}
@@ -362,6 +364,8 @@ public class Xacml20PolicyFromJaxbToObjectModelMapper extends PolicyUnmarshaller
 		}
 	}
 
+
+
 	private void parseVariables(VariableManager<JAXBElement<?>> m) throws XacmlSyntaxException
 	{
 		for (String varId : m.getVariableDefinitionExpressions()) {
@@ -460,15 +464,12 @@ public class Xacml20PolicyFromJaxbToObjectModelMapper extends PolicyUnmarshaller
 		}
 		Collection<ObligationExpression> o = new LinkedList<ObligationExpression>();
 		for (ObligationType obligation : obligations.getObligation()) {
-			o.add(ObligationExpression
-					.builder(
-							obligation.getObligationId(),
-							obligation.getFulfillOn() == EffectType.PERMIT
-									? Effect.PERMIT : Effect.DENY)
-					.attribute(
-							createAttributeAssignments(
-									obligation.getAttributeAssignment()))
-					.build());
+			o.add(ObligationExpression.builder(obligation.getObligationId(),
+									obligation.getFulfillOn() == EffectType.PERMIT ? Effect.PERMIT
+											: Effect.DENY)
+											.attribute(createAttributeAssignments(obligation
+													.getAttributeAssignment()))
+											.build());
 		}
 		return o;
 	}
@@ -478,26 +479,7 @@ public class Xacml20PolicyFromJaxbToObjectModelMapper extends PolicyUnmarshaller
 			throws XacmlSyntaxException {
 		Collection<AttributeAssignmentExpression> expressions = new LinkedList<AttributeAssignmentExpression>();
 		for (AttributeAssignmentType attr : exp) {
-			Expression value = null;
-
-			for (Object o : attr.getContent()) {
-				if (o instanceof JAXBElement<?>) {
-					JAXBElement<?> e = (JAXBElement<?>) o;
-					Object val = e.getValue();
-					if (val instanceof AttributeDesignatorType) {
-						CategoryId categoryId = getDesignatorCategory(e);
-						value = createDesignator(categoryId, (AttributeDesignatorType) val);
-						break;
-					} else if (val instanceof AttributeSelectorType) {
-						Categories categoryId = getSelectorCategory((AttributeSelectorType) val);
-						value = createSelector(categoryId, (AttributeSelectorType) val);
-						break;
-					}
-				}
-			}
-			if (value == null) {
-				value = createValue(attr);
-			}
+			AttributeExp value = createValue(attr);
 			expressions.add(AttributeAssignmentExpression
 					.builder(attr.getAttributeId())
 					.expression(value)
@@ -591,13 +573,14 @@ public class Xacml20PolicyFromJaxbToObjectModelMapper extends PolicyUnmarshaller
 						.attrRef(createSelector(getSelectorCategory(selector), selector))
 						.build();
 			}
-			throw new XacmlSyntaxException(
-					"Match with functionId=\"%s\" does not have designator or selector",
-					match.getMatchId());
+			throw new XacmlSyntaxException("Match with functionId=\"%s\" "
+					+ "does not have designator or selector", match
+					.getMatchId());
 		}
 		if (exp instanceof ResourceMatchType) {
 			ResourceMatchType match = (ResourceMatchType) exp;
-			AttributeDesignatorType desig = match.getResourceAttributeDesignator();
+			AttributeDesignatorType desig = match
+					.getResourceAttributeDesignator();
 			if (desig != null) {
 				return Match
 						.builder()
@@ -615,9 +598,9 @@ public class Xacml20PolicyFromJaxbToObjectModelMapper extends PolicyUnmarshaller
 						.attrRef(createSelector(getSelectorCategory(selector), selector))
 						.build();
 			}
-			throw new XacmlSyntaxException(
-					"Match with functionId=\"%s\" does not have designator or selector",
-					match.getMatchId());
+			throw new XacmlSyntaxException("Match with functionId=\"%s\" "
+					+ "does not have designator or selector", match
+					.getMatchId());
 		}
 		if (exp instanceof EnvironmentMatchType) {
 			EnvironmentMatchType match = (EnvironmentMatchType) exp;
@@ -639,9 +622,9 @@ public class Xacml20PolicyFromJaxbToObjectModelMapper extends PolicyUnmarshaller
 						.attrRef(createSelector(getSelectorCategory(selector), selector))
 						.build();
 			}
-			throw new XacmlSyntaxException(
-					"Match with functionId=\"%s\" does not have designator or selector",
-					match.getMatchId());
+			throw new XacmlSyntaxException("Match with functionId=\"%s\" "
+					+ "does not have designator or selector", match
+					.getMatchId());
 		}
 		throw new XacmlSyntaxException(
 				"Can't build Match from a given instance=\"%s\"", exp);
@@ -747,8 +730,8 @@ public class Xacml20PolicyFromJaxbToObjectModelMapper extends PolicyUnmarshaller
 			CategoryId categoryId = Categories
 					.parse(subjectRef.getSubjectCategory());
 			if(categoryId == null) {
-				throw new XacmlSyntaxException(
-						"Unknown subject attribute designator category=\"%s\"", ref);
+				throw new XacmlSyntaxException("Unknown subject "
+						+ "attribute designator category=\"%s\"", ref);
 			}
 			return categoryId;
 		}

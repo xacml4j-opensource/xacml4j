@@ -10,12 +10,12 @@ package org.xacml4j.v30.policy.function;
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Lesser Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Lesser Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
@@ -33,24 +33,24 @@ public class ArtimeticFunctionsTest
 	@Test
 	public void testAddIntegerFunction()
 	{
-		assertEquals(IntegerExp.of(3),
-				ArithmeticFunctions.addInteger(IntegerExp.of(1),
-						IntegerExp.of(2)));
+		assertEquals(IntegerExp.valueOf(3),
+				ArithmeticFunctions.addInteger(IntegerExp.valueOf(1),
+						IntegerExp.valueOf(2)));
 	}
 
 	@Test
 	public void testAddDoubleFunction()
 	{
-		assertEquals(DoubleExp.of(3.3 + 4.5),
-				ArithmeticFunctions.addDouble(DoubleExp.of(3.3),
-						DoubleExp.of(4.5)));
+		assertEquals(DoubleExp.valueOf(3.3 + 4.5),
+				ArithmeticFunctions.addDouble(DoubleExp.valueOf(3.3),
+						DoubleExp.valueOf(4.5)));
 	}
 
 	@Test
 	public void testDivideIntegerFunction()
 	{
-		assertEquals(DoubleExp.of(2),
-				ArithmeticFunctions.divideInteger(IntegerExp.of(4),
-				IntegerExp.of(2)));
+		assertEquals(DoubleExp.valueOf(2),
+				ArithmeticFunctions.divideInteger(IntegerExp.valueOf(4),
+				IntegerExp.valueOf(2)));
 	}
 }

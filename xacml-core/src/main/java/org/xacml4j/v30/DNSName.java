@@ -67,7 +67,7 @@ public final class DNSName implements Serializable
 	}
 
 	public String getDomainName(){
-		return name.toString();
+		return name.name();
 	}
 
 	/**
@@ -101,7 +101,7 @@ public final class DNSName implements Serializable
 	}
 
 	public String getPublicSuffix(){
-		return name.publicSuffix().toString();
+		return name.publicSuffix().name();
 	}
 
 	public List<String> getDomainNameParts(){
@@ -113,7 +113,7 @@ public final class DNSName implements Serializable
 	}
 
 	public String getTopPrivateDomain(){
-		return name.topPrivateDomain().toString();
+		return name.topPrivateDomain().name();
 	}
 
 	@Override
@@ -142,9 +142,9 @@ public final class DNSName implements Serializable
 	}
 
 	public String toXacmlString() {
-		StringBuilder b = new StringBuilder(name.toString());
+		StringBuilder b = new StringBuilder(name.name());
 		if(!portRange.isUnbound()){
-			b.append(':').append(portRange.toString());
+			b.append(":").append(portRange.toString());
 		}
 		return b.toString();
 	}

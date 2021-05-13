@@ -42,7 +42,6 @@ public final class DecisionCombiningAlgorithms
 	 * then sub-sequentially invokes {@link DecisionRule#evaluate(org.xacml4j.v30.EvaluationContext)}
 	 * with the just created {@link EvaluationContext} instance as an argument
 	 *
-	 * @param <D> {@link DecisionRule} subclass
 	 * @param context a parent evaluation context
 	 * @param decision a decision rule to be evaluated
 	 * @return evaluation result as {@link Decision} instance
@@ -57,7 +56,6 @@ public final class DecisionCombiningAlgorithms
 	 * then sub-sequentially invokes {@link DecisionRule#evaluate(EvaluationContext)}
 	 * with the just created {@link EvaluationContext} instance as an argument
 	 *
-	 * @param <D> {@link DecisionRule} subclass
 	 * @param context a parent evaluation context
 	 * @param decision a decision rule to be evaluated
 	 * @return evaluation result as {@link Decision} instance

@@ -30,7 +30,6 @@ import org.xacml4j.v30.BagOfAttributeExp;
 import org.xacml4j.v30.EvaluationContext;
 import org.xacml4j.v30.EvaluationException;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Ticker;
@@ -81,18 +80,23 @@ final class DefaultResolverContext implements
 		}
 		ImmutableList.Builder<BagOfAttributeExp> b = ImmutableList.builder();
 		for(AttributeReferenceKey ref : keyRefs){
-			b.add(ref.resolve(context));
+			BagOfAttributeExp v = ref.resolve(context);
+			if (v != null) {
+				b.add(v);
+			} else {
+				b.add(ref.getDataType().emptyBag());
+			}
 		}
 		return b.build();
 	}
 
 	@Override
 	public String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("context", context)
-		                  .add("descriptor", descriptor)
-		                  .add("keys", keys)
-		                  .toString();
+		return Objects.toStringHelper(this)
+				.add("context", context)
+				.add("descriptor", descriptor)
+				.add("keys", keys)
+				.toString();
 	}
 
 }

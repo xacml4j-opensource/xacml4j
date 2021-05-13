@@ -34,15 +34,15 @@ public final class HexBinaryExp extends
 		super(XacmlTypes.HEXBINARY, value);
 	}
 	
-	public static HexBinaryExp of(String v){
+	public static HexBinaryExp valueOf(String v){
 		return new HexBinaryExp(BinaryValue.valueOfHexEnc(v));
 	}
 	
-	public static HexBinaryExp of(byte[] v){
+	public static HexBinaryExp valueOf(byte[] v){
 		return new HexBinaryExp(BinaryValue.valueOf(v));
 	}
 	
-	public static HexBinaryExp of(BinaryValue v){
+	public static HexBinaryExp valueOf(BinaryValue v){
 		return new HexBinaryExp(v);
 	}
 	

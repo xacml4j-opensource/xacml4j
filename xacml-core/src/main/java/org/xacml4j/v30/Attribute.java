@@ -26,7 +26,6 @@ import java.util.Collection;
 
 import org.xacml4j.v30.types.EntityExp;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
@@ -117,12 +116,12 @@ public class Attribute
 
 	@Override
 	public final String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("AttributeId", attributeId)
-		                  .add("Issuer", issuer)
-		                  .add("IncludeInResult", includeInResult)
-		                  .add("Values", values)
-		                  .toString();
+		return Objects.toStringHelper(this)
+		.add("AttributeId", attributeId)
+		.add("Issuer", issuer)
+		.add("IncludeInResult", includeInResult)
+		.add("Values", values)
+		.toString();
 	}
 
 	@Override
@@ -133,10 +132,13 @@ public class Attribute
 
 	@Override
 	public final boolean equals(Object o){
-		if (o == this) {
+		if(o == this){
 			return true;
 		}
-		if (!(o instanceof Attribute)) {
+		if(o == null){
+			return false;
+		}
+		if(!(o instanceof Attribute)){
 			return false;
 		}
 		Attribute a = (Attribute)o;
@@ -183,7 +185,7 @@ public class Attribute
 		}
 
 		/**
-		 * Wraps given entities to via {@link EntityExp#of(Entity)}
+		 * Wraps given entities to via {@link EntityExp#valueOf(Entity)}
 		 * and adds them to this entity builder
 		 *
 		 * @param values an array of entities
@@ -192,13 +194,13 @@ public class Attribute
 		public Builder entity(Entity ...values){
 			Preconditions.checkNotNull(values);
 			for(Entity v : values){
-				valueBuilder.add(EntityExp.of(v));
+				valueBuilder.add(EntityExp.valueOf(v));
 			}
 			return this;
 		}
 
 		/**
-		 * Wraps given entities to via {@link EntityExp#of(Entity)}
+		 * Wraps given entities to via {@link EntityExp#valueOf(Entity)}
 		 * and adds them to this entity builder
 		 *
 		 * @param it an iterator over collection of {@link Entity}
@@ -207,7 +209,7 @@ public class Attribute
 		public Builder entities(Iterable<Entity> it){
 			Preconditions.checkNotNull(it);
 			for(Entity v : it){
-				valueBuilder.add(EntityExp.of(v));
+				valueBuilder.add(EntityExp.valueOf(v));
 			}
 			return this;
 		}

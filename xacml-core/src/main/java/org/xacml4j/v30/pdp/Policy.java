@@ -36,9 +36,8 @@ import org.xacml4j.v30.ValueExpression;
 import org.xacml4j.v30.XPathVersion;
 
 import com.google.common.base.Function;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
@@ -178,7 +177,7 @@ public class Policy extends BaseCompositeDecisionRule
 
 	@Override
 	public String toString(){
-		ToStringHelper h = MoreObjects.toStringHelper(this);
+		ToStringHelper h = Objects.toStringHelper(this);
 		return toStringBuilder(h)
 		.add("variableDefinitions", variableDefinitions)
 		.add("policyDefaults",policyDefaults)

@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import org.xacml4j.v30.Expression;
 import org.xacml4j.v30.ValueType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 
@@ -130,7 +129,7 @@ final class FunctionParamValueTypeSequenceSpec extends BaseFunctionParamSpec
 
 	@Override
 	public String toString(){
-		return MoreObjects
+		return Objects
 				.toStringHelper(this)
 				.add("min", min)
 				.add("max", max)

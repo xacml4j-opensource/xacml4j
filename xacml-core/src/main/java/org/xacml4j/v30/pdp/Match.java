@@ -25,14 +25,11 @@ package org.xacml4j.v30.pdp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xacml4j.v30.AttributeExp;
-import org.xacml4j.v30.AttributeExpType;
 import org.xacml4j.v30.BagOfAttributeExp;
 import org.xacml4j.v30.EvaluationContext;
 import org.xacml4j.v30.EvaluationException;
 import org.xacml4j.v30.MatchResult;
-import org.xacml4j.v30.ValueType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
@@ -54,23 +51,14 @@ public class Match implements PolicyElement, Matchable
 		Preconditions.checkNotNull(b.attr);
 		Preconditions.checkNotNull(b.attrRef);
 		Preconditions.checkNotNull(b.predicate);
-		Preconditions.checkArgument(
-				b.predicate.getNumberOfParams() == 2,
+		Preconditions.checkArgument(b.predicate.getNumberOfParams() == 2,
 				"Expecting function with 2 arguments");
-		final FunctionParamSpec param0 = b.predicate.getParamSpecAt(0);
-		final ValueType evaluatesToType = b.attr.getEvaluatesTo();
-		Preconditions.checkArgument(
-				param0.isValidParamType(evaluatesToType),
-				"Given function argument \"%s\" at index=\"0\" is not " +
-						"compatible with a given attribute value type \"%s\"",
-				param0, evaluatesToType);
-		final FunctionParamSpec param1 = b.predicate.getParamSpecAt(1);
-		final AttributeExpType attrRefDataType = b.attrRef.getDataType();
-		Preconditions.checkArgument(
-				param1.isValidParamType(attrRefDataType),
-				"Given function argument \"%s\" at index=\"1\" type is not " +
-						"compatible with a given attribute reference type \"%s\"",
-				param1, attrRefDataType);
+		Preconditions.checkArgument(b.predicate.getParamSpecAt(0).
+				isValidParamType(b.attr.getEvaluatesTo()),
+				"Given function argument at index=\"0\" type is not compatible with a given attribute value type");
+		Preconditions.checkArgument(b.predicate.getParamSpecAt(1).
+				isValidParamType((b.attrRef.getDataType())),
+				"Given function argument at index=\"1\" type is not compatible with a given attribute reference type");
 		this.value = b.attr;
 		this.predicate = b.predicate;
 		this.attributeRef = b.attrRef;
@@ -129,7 +117,8 @@ public class Match implements PolicyElement, Matchable
 			return MatchResult.NOMATCH;
 		}catch(EvaluationException e){
 			if(log.isDebugEnabled()){
-				log.debug("Match evaluation failed with an exception", e);
+				log.debug("Match evaluation " +
+						"failed with an exception", e);
 			}
 			context.setEvaluationStatus(e.getStatus());
 			return MatchResult.INDETERMINATE;
@@ -152,11 +141,11 @@ public class Match implements PolicyElement, Matchable
 
 	@Override
 	public String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("MatchId", predicate.getId())
-		                  .add("Value", value)
-		                  .add("Reference", attributeRef)
-		                  .toString();
+		return Objects.toStringHelper(this)
+				.add("MatchId", predicate.getId())
+				.add("Value", value)
+				.add("Reference", attributeRef)
+				.toString();
 	}
 
 	@Override

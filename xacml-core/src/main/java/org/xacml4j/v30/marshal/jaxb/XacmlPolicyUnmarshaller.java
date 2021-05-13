@@ -34,11 +34,11 @@ import org.xacml4j.v30.spi.function.FunctionProvider;
 public class XacmlPolicyUnmarshaller extends BaseJAXBUnmarshaller<CompositeDecisionRule>
 	implements PolicyUnmarshaller
 {
-	private final Xacml30PolicyFromJaxbToObjectModelMapper v30mapper;
-	private final Xacml20PolicyFromJaxbToObjectModelMapper v20mapper;
+	private Xacml30PolicyFromJaxbToObjectModelMapper v30mapper;
+	private Xacml20PolicyFromJaxbToObjectModelMapper v20mapper;
 
-	private final boolean supportsXacml20Policies;
-
+	private boolean supportsXacml20Policies;
+	
 	public XacmlPolicyUnmarshaller(
 			JAXBContext context,
 			FunctionProvider functions,
@@ -81,7 +81,7 @@ public class XacmlPolicyUnmarshaller extends BaseJAXBUnmarshaller<CompositeDecis
 			return v30mapper.create(jaxbInstance.getValue());
 		}
 		throw new IllegalArgumentException(
-				String.format("Can not unmarshal=\"%s\" element",
+				String.format("Can not unmarshall=\"%s\" element",
 						jaxbInstance.getName()));
 	}
 }

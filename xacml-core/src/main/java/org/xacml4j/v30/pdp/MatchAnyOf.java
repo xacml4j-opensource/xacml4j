@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import org.xacml4j.v30.EvaluationContext;
 import org.xacml4j.v30.MatchResult;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -37,17 +36,17 @@ import com.google.common.collect.ImmutableList;
 public class MatchAnyOf
 	implements PolicyElement, Matchable
 {
-	private final static Logger log = LoggerFactory.getLogger(MatchAnyOf.class);
+	private final static Logger log = LoggerFactory.getLogger(MatchAllOf.class);
 
-	private final Collection<MatchAllOf> allOfs;
+	private final Collection<MatchAllOf> anyOfs;
 
 	private MatchAnyOf(Builder b){
-		this.allOfs = b.allMatchAllOfs.build();
-		Preconditions.checkArgument(allOfs.size() >= 1, "At least one MatchAllOf instance is required");
+		this.anyOfs = b.allMatchAllOfs.build();
+		Preconditions.checkArgument(anyOfs.size() >= 1);
 	}
 
 	public Collection<MatchAllOf> getAllOf(){
-		return allOfs;
+		return anyOfs;
 	}
 
 	public static Builder builder(){
@@ -58,11 +57,12 @@ public class MatchAnyOf
 	public MatchResult match(EvaluationContext context)
 	{
 		MatchResult state = MatchResult.NOMATCH;
-		for(Matchable m : allOfs){
+		for(Matchable m : anyOfs){
 			MatchResult result = m.match(context);
 			if(result == MatchResult.INDETERMINATE){
 				if(log.isDebugEnabled()){
-					log.debug("AnyOf matchable match result=\"{}\"", result);
+					log.debug("AnyOf matchable " +
+							"match result=\"{}\"", result);
 				}
 				state = MatchResult.INDETERMINATE;
 				continue;
@@ -81,7 +81,7 @@ public class MatchAnyOf
 	@Override
 	public void accept(PolicyVisitor v) {
 		v.visitEnter(this);
-		for(Matchable m : allOfs){
+		for(Matchable m : anyOfs){
 			m.accept(v);
 		}
 		v.visitLeave(this);
@@ -89,14 +89,14 @@ public class MatchAnyOf
 
 	@Override
 	public String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("AllOf", allOfs)
-		                  .toString();
+		return Objects.toStringHelper(this)
+				.add("AnyOf", anyOfs)
+				.toString();
 	}
 
 	@Override
 	public int hashCode(){
-		return allOfs.hashCode();
+		return anyOfs.hashCode();
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class MatchAnyOf
 			return false;
 		}
 		MatchAnyOf m = (MatchAnyOf)o;
-		return allOfs.equals(m.allOfs);
+		return anyOfs.equals(m.anyOfs);
 	}
 
 
@@ -129,6 +129,7 @@ public class MatchAnyOf
 			this.allMatchAllOfs.addAll(allOfs);
 			return this;
 		}
+
 
 		public MatchAnyOf build(){
 			return new MatchAnyOf(this);

@@ -35,14 +35,14 @@ public abstract class BaseDuration <T extends BaseDuration<?>>
 {
 	private static final long serialVersionUID = 6573551346951236604L;
 
-	private final Duration value;
+	private Duration value;
 
 	protected static DatatypeFactory df = null;
 
 	static{
 		try{
 			df = DatatypeFactory.newInstance();
-		}catch(DatatypeConfigurationException ignored){
+		}catch(DatatypeConfigurationException e){
 		}
 	}
 

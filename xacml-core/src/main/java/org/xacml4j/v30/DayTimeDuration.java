@@ -69,7 +69,7 @@ public final class DayTimeDuration
 	 */
 	public static DayTimeDuration parse(Object any){
 		if(any instanceof DayTimeDuration){
-			return new DayTimeDuration(((DayTimeDuration)any).getDuration());
+			new DayTimeDuration(((DayTimeDuration)any).getDuration());
 		}
 		Duration d = parseDuration(any);
 		return new DayTimeDuration(d);

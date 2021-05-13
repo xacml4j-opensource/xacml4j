@@ -48,24 +48,24 @@ public final class YearMonthDurationExp
 		super(XacmlTypes.YEARMONTHDURATION, value);
 	}
 
-	public static YearMonthDurationExp of(String v){
+	public static YearMonthDurationExp valueOf(String v){
 		return new YearMonthDurationExp(YearMonthDuration.create(v));
 	}
 
-	public static YearMonthDurationExp of(Duration v){
+	public static YearMonthDurationExp valueOf(Duration v){
 		return new YearMonthDurationExp(YearMonthDuration.create(v));
 	}
 
-	public static YearMonthDurationExp of(YearMonthDuration v){
+	public static YearMonthDurationExp valueOf(YearMonthDuration v){
 		return new YearMonthDurationExp(v);
 	}
 
-	public static YearMonthDurationExp of(StringExp v){
-		return of(v.getValue());
+	public static YearMonthDurationExp valueOf(StringExp v){
+		return valueOf(v.getValue());
 	}
 
 	public StringExp toStringExp(){
-		return StringExp.of(getValue().toXacmlString());
+		return StringExp.valueOf(getValue().toXacmlString());
 	}
 
 	@Override

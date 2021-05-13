@@ -42,7 +42,6 @@ import org.xacml4j.v30.types.TypeToString;
 import org.xacml4j.v30.types.XPathExp;
 import org.xacml4j.v30.types.XacmlTypes;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
@@ -208,8 +207,8 @@ public final class Entity extends AttributeContainer
 				}
 				AttributeExp value = toString.get().fromString(v);
 				if(log.isDebugEnabled()){
-					log.debug("Node of type=\"{}\" converted attribute=\"{}\"",
-							n.getNodeType(), value);
+					log.debug("Node of type=\"{}\" " +
+							"converted attribute=\"{}\"", n.getNodeType(), value);
 				}
 				values.add(value);
 			}catch(EvaluationException e){
@@ -232,10 +231,10 @@ public final class Entity extends AttributeContainer
 
 	@Override
 	public String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("attributes", attributes)
-		                  .add("content", (content != null)?DOMUtil.toString(content.getDocumentElement()):content)
-		                  .toString();
+		return Objects.toStringHelper(this)
+		.add("attributes", attributes)
+		.add("content", (content != null)?DOMUtil.toString(content.getDocumentElement()):content)
+		.toString();
 	}
 
 	@Override

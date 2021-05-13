@@ -63,9 +63,9 @@ public class XPathFunctions
 	{
 		try{
 			NodeList nodes = context.evaluateToNodeSet(xpath);
-			return IntegerExp.of(nodes.getLength());
+			return IntegerExp.valueOf(nodes.getLength());
 		}catch(EvaluationException e){
-			return IntegerExp.of(0);
+			return IntegerExp.valueOf(0);
 		}
 	}
 

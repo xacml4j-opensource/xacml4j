@@ -106,7 +106,7 @@ public class BagFunctions
 	}
 
 	static IntegerExp typeBagSizeImpl(BagOfAttributeExp bag) {
-		return IntegerExp.of(bag.size());
+		return IntegerExp.valueOf(bag.size());
 	}
 
 	static BooleanExp containsImpl(AttributeExp v,
@@ -120,7 +120,7 @@ public class BagFunctions
 		return BooleanExp.valueOf(bag.isEmpty());
 	}
 
-	@XacmlFuncSpec(id="urn:xacml4j:names:tc:xacml:1.0:function:string-bag-is-empty")
+	@XacmlFuncSpec(id="urn:artagon:names:tc:xacml:1.0:function:string-bag-is-empty")
 	@XacmlFuncReturnType(typeId="http://www.w3.org/2001/XMLSchema#boolean")
 	public static BooleanExp stringBagIsEmpty(
 			@XacmlFuncParam(typeId="http://www.w3.org/2001/XMLSchema#string", isBag=true)
@@ -704,7 +704,7 @@ public class BagFunctions
 	}
 	// entity
 
-	@XacmlFuncSpec(id="urn:xacml4j:names:tc:xacml:1.0:function:entity-bag-is-empty")
+	@XacmlFuncSpec(id="urn:artagon:names:tc:xacml:1.0:function:entity-bag-is-empty")
 	@XacmlFuncReturnType(typeId="http://www.w3.org/2001/XMLSchema#boolean")
 	public static BooleanExp entityBagIsEmpty(
 			@XacmlFuncParam(typeId="urn:oasis:names:tc:xacml:3.0:data type:entity", isBag=true)

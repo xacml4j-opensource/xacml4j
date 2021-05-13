@@ -24,7 +24,6 @@ package org.xacml4j.v30;
 
 import java.util.Collection;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSetMultimap;
@@ -88,11 +87,11 @@ public abstract class BaseDecisionRuleResponse
 
 	@Override
 	public final String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("id", id)
-		                  .add("attributes", attributes)
-		                  .add("fullFillOn", fulfillOn)
-		                  .toString();
+		return Objects.toStringHelper(this)
+		.add("id", id)
+		.add("attributes", attributes)
+		.add("fullFillOn", fulfillOn)
+		.toString();
 	}
 
 	public abstract static class Builder<T extends Builder<?>>

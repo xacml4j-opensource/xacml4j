@@ -35,12 +35,12 @@ public final class DoubleExp extends BaseAttributeExp<Double>
 		super(XacmlTypes.DOUBLE, value);
 	}
 
-	public static DoubleExp of(Number value){
+	public static DoubleExp valueOf(Number value){
 		Preconditions.checkNotNull(value);
 		return new DoubleExp(value.doubleValue());
 	}
 
-	public static DoubleExp of(String v){
+	public static DoubleExp valueOf(String v){
 		Preconditions.checkArgument(!Strings.isNullOrEmpty(v));
 		 if (v.endsWith("INF")) {
 	            int infIndex = v.lastIndexOf("INF");
@@ -50,7 +50,7 @@ public final class DoubleExp extends BaseAttributeExp<Double>
 	}
 
 	public StringExp toStringExp(){
-		return StringExp.of(getValue().toString());
+		return StringExp.valueOf(getValue().toString());
 	}
 
 	public DoubleExp add(DoubleExp d){

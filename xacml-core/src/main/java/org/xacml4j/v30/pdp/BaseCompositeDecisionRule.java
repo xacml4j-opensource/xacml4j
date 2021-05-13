@@ -34,7 +34,6 @@ import org.xacml4j.v30.EvaluationException;
 import org.xacml4j.v30.MatchResult;
 import org.xacml4j.v30.Version;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMultimap;
@@ -185,7 +184,7 @@ abstract class BaseCompositeDecisionRule extends BaseDecisionRule
 	protected abstract Decision combineDecisions(EvaluationContext context);
 
 	@Override
-	protected MoreObjects.ToStringHelper toStringBuilder(MoreObjects.ToStringHelper b){
+	protected Objects.ToStringHelper toStringBuilder(Objects.ToStringHelper b){
 		return super.toStringBuilder(b)
 			.add("version", version)
 			.add("issuer", policyIssuer)

@@ -29,10 +29,13 @@ import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
+import java.util.Collections;
+
 import org.easymock.Capture;
 import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
+import org.xacml4j.v30.Category;
 import org.xacml4j.v30.CompositeDecisionRule;
 import org.xacml4j.v30.Decision;
 import org.xacml4j.v30.EvaluationContext;
@@ -86,10 +89,8 @@ public class DefaultPolicyDecisionPointTest
 	@Test
 	public void testRequestEvaluationPolicyDomainEvaluatesToPermitAndRequestReturnEvaluatedPolicyIdsFalse()
 	{
-		RequestContext req = RequestContext
-				.builder()
-				.returnPolicyIdList(false)
-				.build();
+
+		RequestContext req = new RequestContext(false, Collections.<Category>emptyList());
 
 		Capture<PolicyRepositoryListener> c = new Capture<PolicyRepositoryListener>();
 		repository.addPolicyRepositoryListener(capture(c));
@@ -119,10 +120,8 @@ public class DefaultPolicyDecisionPointTest
 	@Test
 	public void testRequestEvaluationPolicyDomainEvaluatesToDenyAndRequestReturnEvaluatedPolicyIdsFalse()
 	{
-		RequestContext req = RequestContext
-				.builder()
-				.returnPolicyIdList(false)
-				.build();
+
+		RequestContext req = new RequestContext(false, Collections.<Category>emptyList());
 
 		Capture<PolicyRepositoryListener> c = new Capture<PolicyRepositoryListener>();
 		repository.addPolicyRepositoryListener(capture(c));

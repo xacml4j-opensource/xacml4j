@@ -44,9 +44,6 @@ import org.xacml4j.v30.RequestContext;
 import org.xacml4j.v30.marshal.jaxb.JAXBContextUtil;
 import org.xacml4j.v30.marshal.jaxb.Xacml20RequestContextUnmarshaller;
 
-import com.google.common.base.Supplier;
-import com.google.common.io.Closeables;
-
 
 public class Xacml20TestUtility
 {
@@ -56,7 +53,8 @@ public class Xacml20TestUtility
 	/** Private constructor for utility class */
 	private Xacml20TestUtility() {}
 
-	public static void assertResponse(ResponseType a, ResponseType b) {
+	public static void assertResponse(ResponseType a, ResponseType b)
+	{
 		assertEquals(a.getResult().size(), b.getResult().size());
 		List<ResultType> ar = a.getResult();
 		List<ResultType> br = b.getResult();
@@ -80,7 +78,8 @@ public class Xacml20TestUtility
 
 	public static void assertObligations(ObligationsType a, ObligationsType b)
 	{
-		if(a == null && b == null){
+		if(a == null &&
+				b == null){
 			return;
 		}
 		List<ObligationType> oa = a.getObligation();
@@ -92,9 +91,9 @@ public class Xacml20TestUtility
 		assertTrue(aMap.keySet().containsAll(bMap.keySet()));
 		assertTrue(bMap.keySet().containsAll(aMap.keySet()));
 
-		for(String obligationId : aMap.keySet()){
-			ObligationType obligationA = aMap.get(obligationId);
-			ObligationType obligationB = bMap.get(obligationId);
+		for(Map.Entry<String, ObligationType> entry : aMap.entrySet()){
+			ObligationType obligationA = entry.getValue();
+			ObligationType obligationB = bMap.get(entry.getKey());
 			assertObligation(obligationA, obligationB);
 		}
 	}
@@ -108,9 +107,9 @@ public class Xacml20TestUtility
 		Map<String, AttributeAssignmentType> bMap = toAttributeAssignmentMap(bAttr);
 		assertTrue(aMap.keySet().containsAll(bMap.keySet()));
 		assertTrue(bMap.keySet().containsAll(aMap.keySet()));
-		for(String attributeId : aMap.keySet()){
-			AttributeAssignmentType attrA = aMap.get(attributeId);
-			AttributeAssignmentType attrB = bMap.get(attributeId);
+		for (Map.Entry<String, AttributeAssignmentType> entry : aMap.entrySet()) {
+			AttributeAssignmentType attrA = entry.getValue();
+			AttributeAssignmentType attrB = bMap.get(entry.getKey());
 			assertAttributeAssignment(attrA, attrB);
 		}
 	}
@@ -145,33 +144,19 @@ public class Xacml20TestUtility
 	@SuppressWarnings("unchecked")
 	public static ResponseType getResponse(String resourcePath) throws Exception
 	{
-		InputStream in = null;
-		try {
-			in = getClasspathResource(resourcePath).get();
-			assertNotNull(in);
-			return ((JAXBElement<ResponseType>) context.createUnmarshaller().unmarshal(in)).getValue();
-		} finally {
-			Closeables.closeQuietly(in);
-		}
+		InputStream in = getClasspathResource(resourcePath);
+		assertNotNull(in);
+		return ((JAXBElement<ResponseType>)context.createUnmarshaller().unmarshal(in)).getValue();
 	}
 
 	public static RequestContext getRequest(String resourcePath) throws Exception {
-		InputStream in = null;
-		try {
-			in = getClasspathResource(resourcePath).get();
-			return requestUnmarshaller.unmarshal(in);
-		} finally {
-			Closeables.closeQuietly(in);
-		}
+		return requestUnmarshaller.unmarshal(getClasspathResource(resourcePath));
 	}
 
-	public static Supplier<InputStream> getClasspathResource(final String resourcePath) {
-		return new Supplier<InputStream>() {
-			@Override
-			public InputStream get() {
-				ClassLoader cl = Thread.currentThread().getContextClassLoader();
-				return cl.getResourceAsStream(resourcePath);
-			}
-		};
+	public static InputStream getClasspathResource(String resourcePath) throws Exception
+	{
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		return cl.getResourceAsStream(resourcePath);
 	}
+
 }

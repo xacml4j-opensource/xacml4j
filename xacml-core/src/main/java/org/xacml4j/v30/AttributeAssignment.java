@@ -24,7 +24,6 @@ package org.xacml4j.v30;
 
 import org.xacml4j.v30.pdp.AttributeAssignmentExpression;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -105,11 +104,11 @@ public class AttributeAssignment
 
 	@Override
 	public String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("attributeId", attributeId)
-		                  .add("category", category)
-		                  .add("value", attribute)
-		                  .add("issuer", issuer).toString();
+		return Objects.toStringHelper(this)
+		.add("attributeId", attributeId)
+		.add("category", category)
+		.add("value", attribute)
+		.add("issuer", issuer).toString();
 	}
 
 	@Override

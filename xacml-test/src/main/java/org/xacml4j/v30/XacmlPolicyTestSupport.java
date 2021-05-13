@@ -26,7 +26,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -48,8 +47,6 @@ import org.xacml4j.v30.spi.repository.InMemoryPolicyRepository;
 import org.xacml4j.v30.spi.repository.PolicyRepository;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Supplier;
-import com.google.common.io.Closeables;
 
 public class XacmlPolicyTestSupport {
 	protected final Logger log = LoggerFactory.getLogger(XacmlPolicyTestSupport.class);
@@ -79,20 +76,14 @@ public class XacmlPolicyTestSupport {
 	}
 
 	protected void verifyXacml30Response(PolicyDecisionPoint pdp,
-			RequestContext request,
-			ResponseContext expectedResponse) throws Exception {
-		ResponseContext resp = pdp.decide(request);
+			String xacmlRequestResource,
+			String expectedXacmlResponseResource) throws Exception {
+		RequestContext req = getXacml30Request(xacmlRequestResource);
+		ResponseContext expectedResponse = getXacml30Response(expectedXacmlResponseResource);
+		ResponseContext resp = pdp.decide(req);
 		log.debug("Expected XACML 3.0 response=\"{}\"", expectedResponse);
 		log.debug("Received XACML 3.0 response=\"{}\"", resp);
 		assertResponse(expectedResponse, resp);
-	}
-
-	protected void verifyXacml30Response(PolicyDecisionPoint pdp,
-										 String xacmlRequestResource,
-										 String expectedXacmlResponseResource) throws Exception {
-		RequestContext req = getXacml30Request(xacmlRequestResource);
-		ResponseContext expectedResponse = getXacml30Response(expectedXacmlResponseResource);
-		verifyXacml30Response(pdp, req, expectedResponse);
 	}
 
 	protected void verifyXacml20Response(
@@ -109,27 +100,22 @@ public class XacmlPolicyTestSupport {
 		assertResponse(expectedResponse, resp);
 	}
 
-	protected Supplier<InputStream> getResource(final String resourcePath, final ClassLoader cl) {
-		return new Supplier<InputStream>() {
-			@Override
-			public InputStream get() {
-				log.debug("Loading resource \"{}\"", resourcePath);
-				InputStream in = cl.getResourceAsStream(resourcePath);
-				if(in  == null){
-					throw new IllegalArgumentException(String.format(
-							"Failed to load resource from path=\"%s\"", resourcePath));
-				}
-				return in;
-			}
-		};
+	protected InputStream getResource(String resourcePath, ClassLoader cl) {
+		log.debug("Loading resource \"{}\"", resourcePath);
+		InputStream in = cl.getResourceAsStream(resourcePath);
+		if(in  == null){
+			throw new IllegalArgumentException(String.format(
+					"Failed to load resource from path=\"%s\"", resourcePath));
+		}
+		return in;
 	}
 
-	protected Supplier<InputStream> getResource(String resourcePath) {
+	protected InputStream getResource(String resourcePath) {
 		return getResource(resourcePath, Thread.currentThread()
 				.getContextClassLoader());
 	}
 
-	protected Supplier<InputStream> getPolicy(String path){
+	protected InputStream getPolicy(String path){
 		if(log.isDebugEnabled()){
 			log.debug("Loading policy from path=\"{}\"", path);
 		}
@@ -137,43 +123,19 @@ public class XacmlPolicyTestSupport {
 	}
 
 	protected ResponseContext getXacml30Response(String resourcePath) throws Exception {
-		InputStream in = null;
-		try {
-			in = getResource(resourcePath).get();
-			return responseUnmarshaller.unmarshal(in);
-		} finally {
-			Closeables.closeQuietly(in);
-		}
+		return responseUnmarshaller.unmarshal(getResource(resourcePath));
 	}
 
 	protected ResponseContext getXacml20Response(String resourcePath) throws Exception {
-		InputStream in = null;
-		try {
-			in = getResource(resourcePath).get();
-			return xacml20ResponseUnmarshaller.unmarshal(in);
-		} finally {
-			Closeables.closeQuietly(in);
-		}
+		return xacml20ResponseUnmarshaller.unmarshal(getResource(resourcePath));
 	}
 
 	protected RequestContext getXacml20Request(String path) throws Exception {
-		InputStream in = null;
-		try {
-			in = getResource(path).get();
-			return xacml20RequestUnmarshaller.unmarshal(in);
-		} finally {
-			Closeables.closeQuietly(in);
-		}
+		return xacml20RequestUnmarshaller.unmarshal(getResource(path));
 	}
 
 	protected RequestContext getXacml30Request(String path) throws Exception {
-		InputStream in = null;
-		try {
-			in = getResource(path).get();
-			return requestUnmarshaller.unmarshal(in);
-		} finally {
-			Closeables.closeQuietly(in);
-		}
+		return requestUnmarshaller.unmarshal(getResource(path));
 	}
 
 	public static void assertResponse(ResponseContext resp1,
@@ -271,7 +233,7 @@ public class XacmlPolicyTestSupport {
 		private FunctionProviderBuilder functionProviderBuilder;
 		private PolicyInformationPointBuilder pipBuilder;
 		private DecisionCombiningAlgorithmProviderBuilder decisionAlgoProviderBuilder;
-		private Collection<Object> policies; // might be either Supplier<InputStream> or CompositeDecisionRule
+		private Collection<InputStream> policies;
 
 		public Builder(String pdpId, String pipId, String repositoryId){
 			Preconditions.checkNotNull(pdpId);
@@ -280,7 +242,7 @@ public class XacmlPolicyTestSupport {
 			this.functionProviderBuilder = FunctionProviderBuilder.builder();
 			this.decisionAlgoProviderBuilder = DecisionCombiningAlgorithmProviderBuilder.builder();
 			this.pipBuilder = PolicyInformationPointBuilder.builder(pipId);
-			this.policies = new ArrayList<Object>();
+			this.policies = new LinkedList<InputStream>();
 			this.repositoryId = repositoryId;
 			this.pdpId = pdpId;
 		}
@@ -301,7 +263,7 @@ public class XacmlPolicyTestSupport {
 			return this;
 		}
 
-		public Builder defaultFunctions() {
+		public Builder defaultFunctions(){
 			functionProviderBuilder.defaultFunctions();
 			return this;
 		}
@@ -321,28 +283,19 @@ public class XacmlPolicyTestSupport {
 			return this;
 		}
 
-		public Builder policy(Supplier<InputStream> stream){
+		public Builder policy(InputStream stream){
 			this.policies.add(stream);
 			return this;
 		}
 
-		public Builder policies(Supplier<InputStream> ... policies){
+		public Builder policies(InputStream ... policies){
 			Collections.addAll(this.policies, policies);
 			return this;
 		}
 
-		public Builder policy(CompositeDecisionRule policy){
-			this.policies.add(policy);
-			return this;
-		}
-
-		public Builder policies(CompositeDecisionRule... policies){
-			Collections.addAll(this.policies, policies);
-			return this;
-		}
-
-		public Builder policyFromClasspath(String path){
-			this.policies.add(getPolicy(path));
+		public Builder policyFromClasspath(String path ){
+			InputStream in = getPolicy(path);
+			this.policies.add(in);
 			return this;
 		}
 
@@ -356,25 +309,14 @@ public class XacmlPolicyTestSupport {
 			return this;
 		}
 
-		@SuppressWarnings("unchecked")
 		public PolicyDecisionPoint build() throws Exception
 		{
 			PolicyRepository repository = new InMemoryPolicyRepository(
 					repositoryId,
 					functionProviderBuilder.build(),
 					decisionAlgoProviderBuilder.create());
-			for (Object policy : policies) {
-				if (policy instanceof Supplier) {
-					repository.importPolicy((Supplier<InputStream>) policy);
-				} else if (policy instanceof CompositeDecisionRule) {
-					repository.add((CompositeDecisionRule) policy);
-				} else {
-					throw new UnsupportedOperationException(
-						String.format(
-							"Unable to interpret policy represented by '%s'. " +
-							"There are 'Supplier<InputStream>' or 'CompositeDecisionRule' supported only.",
-							policy.getClass()));
-				}
+			for(InputStream in : policies){
+				repository.importPolicy(in);
 			}
 			return PolicyDecisionPointBuilder
 					.builder(pdpId)

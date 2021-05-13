@@ -51,7 +51,6 @@ import org.xacml4j.v30.spi.repository.InMemoryPolicyRepository;
 import org.xacml4j.v30.spi.repository.PolicyRepository;
 
 import com.google.common.base.Strings;
-import com.google.common.base.Supplier;
 
 
 public class Xacml20ConformanceTest
@@ -227,8 +226,9 @@ public class Xacml20ConformanceTest
 		Xacml20TestUtility.assertResponse(getResponse(testPrefix, testCaseNum), actual);
 	}
 
-	private static Supplier<InputStream> getPolicy(
-			String prefix, int number, String suffix) {
+	private static InputStream getPolicy(
+			String prefix, int number, String suffix) throws Exception
+	{
 		String path = "oasis-xacml20-compat-test/" + createTestAssetName(prefix, number, suffix);
 		return Xacml20TestUtility.getClasspathResource(path);
 	}
@@ -244,13 +244,13 @@ public class Xacml20ConformanceTest
 	private static void addPolicy(PolicyRepository r, String prefix, String suffix, int index)
 	{
 		try{
-			final Supplier<InputStream> policyStream = getPolicy(prefix, index, suffix);
+			final InputStream policyStream = getPolicy(prefix, index, suffix);
 			CompositeDecisionRule rule = r.importPolicy(policyStream);
 			if (rule == null) {
 				LOG.info("Could not load policy with prefix: {}, index: {}, suffix {}",
 						new Object[]{prefix, index, suffix});
 			}
-		} catch (Exception e) {
+		}catch(Exception e){
 			LOG.info("Could not load policy with prefix: {}, index: {}, suffix {}",
 					new Object[]{prefix, index, suffix, e});
 		}

@@ -43,13 +43,13 @@ public final class StringExp extends BaseAttributeExp<String>
 	 * @exception IllegalArgumentException if given
 	 * string value is null or empty
 	 */
-	public static StringExp of(String v){
+	public static StringExp valueOf(String v){
 		Preconditions.checkArgument(!Strings.isNullOrEmpty(v));
 		return new StringExp(v);
 	}
 
 	/**
-	 * Returns an empty string bag.
+	 * Delegates to {@link XacmlTypes#STRING#emptyBag()}
 	 *
 	 * @return {@link BagOfAttributeExp} empty bag
 	 */
@@ -58,7 +58,7 @@ public final class StringExp extends BaseAttributeExp<String>
 	}
 
 	/**
-	 * Returns a string bag.
+	 * Delegates to {@link XacmlTypes#STRING#bag()}
 	 *
 	 * @return {@link BagOfAttributeExp} empty bag
 	 */
@@ -71,11 +71,11 @@ public final class StringExp extends BaseAttributeExp<String>
 	}
 
 	public StringExp concat(StringExp v){
-		return StringExp.of(getValue() + v);
+		return StringExp.valueOf(getValue() + v);
 	}
 
 	public StringExp trim(){
-		return StringExp.of(getValue().trim());
+		return StringExp.valueOf(getValue().trim());
 	}
 
 	public boolean startsWith(StringExp v){
@@ -91,11 +91,11 @@ public final class StringExp extends BaseAttributeExp<String>
 	}
 
 	public StringExp toLowerCase(){
-		return StringExp.of(getValue().toLowerCase());
+		return StringExp.valueOf(getValue().toLowerCase());
 	}
 
 	public StringExp toUpperCase(){
-		return StringExp.of(getValue().toUpperCase());
+		return StringExp.valueOf(getValue().toUpperCase());
 	}
 }
 

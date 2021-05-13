@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>org.xacml4j</groupId>
 		<artifactId>xacml</artifactId>
-		<version>1.5.0-SNAPSHOT</version>
+		<version>1.3.3-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>xacml-core</artifactId>
@@ -40,14 +40,6 @@
 					<schemaIncludes><value>*.xsd</value></schemaIncludes>
 					<schemaExcludes><value>xml.xsd</value></schemaExcludes>
 					<schemaDirectory>${basedir}/src/main/xsd</schemaDirectory>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<!-- Exclude generated packages from JavaDoc -->
-					<excludePackageNames>org.oasis.xacml.v20.jaxb.*:org.oasis.xacml.v30.jaxb:org.oasis.xacml.v30.jaxb.*</excludePackageNames>
 				</configuration>
 			</plugin>
 		</plugins>

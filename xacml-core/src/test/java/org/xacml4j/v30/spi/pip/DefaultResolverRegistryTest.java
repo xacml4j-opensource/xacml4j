@@ -31,9 +31,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.easymock.IMocksControl;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.xacml4j.v30.AttributeDesignatorKey;
 import org.xacml4j.v30.Categories;
 import org.xacml4j.v30.EvaluationContext;
@@ -53,9 +51,6 @@ public class DefaultResolverRegistryTest
 	private AttributeResolver r2;
 
 	private AttributeResolverDescriptor d1;
-
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
 
 	@Before
 	public void init(){
@@ -95,12 +90,9 @@ public class DefaultResolverRegistryTest
 		control.verify();
 	}
 
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void testAddResolversWithTheSameIdsAndAttributesNoIssuer()
 	{
-		expectedException.expect(IllegalArgumentException.class);
-		expectedException.expectMessage("Attribute resolver with id=\"test1\" is already registered with this registry");
-
 		AttributeResolverDescriptor d = AttributeResolverDescriptorBuilder
 				.builder("test1", "Test1", Categories.SUBJECT_ACCESS)
 				.attribute("testAttr1", XacmlTypes.INTEGER)

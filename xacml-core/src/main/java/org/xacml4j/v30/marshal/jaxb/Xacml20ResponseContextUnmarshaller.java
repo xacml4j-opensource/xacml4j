@@ -127,7 +127,7 @@ implements ResponseUnmarshaller
 								.attribute(
 								Attribute
 								.builder(RESOURCE_ID)
-								.value(StringExp.of(result.getResourceId()))
+								.value(StringExp.valueOf(result.getResourceId()))
 								.build()).build())
 						.build());
 			}

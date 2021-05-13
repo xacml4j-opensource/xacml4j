@@ -34,20 +34,20 @@ public final class X500NameExp extends BaseAttributeExp<X500Principal>
 		super(XacmlTypes.X500NAME, value);
 	}
 	
-	public static X500NameExp of(String v){
+	public static X500NameExp valueOf(String v){
 		return new X500NameExp(new X500Principal(v));
 	}
 	
-	public static X500NameExp of(StringExp v){
-		return of(v.getValue());
+	public static X500NameExp valueOf(StringExp v){
+		return valueOf(v.getValue());
 	}
 	
-	public static X500NameExp of(X500Principal p){
+	public static X500NameExp valueOf(X500Principal p){
 		return new X500NameExp(p);
 	}
 	
 	public StringExp toStringExp(){
-		return StringExp.of(getValue().toString());
+		return StringExp.valueOf(getValue().toString());
 	}
 	
 	public static BagOfAttributeExp emptyBag(){

@@ -98,10 +98,13 @@ public final class PortRange implements Serializable
 	/**
 	 * Creates an instance of {@code PortRange} based on the given value.
 	 *
-	 * @param index starting index
-	 * @param value a {@code String} representing the range
+	 * @param value
+	 *            a {@code String} representing the range
+	 *
 	 * @return a new {@code PortRange}
-	 * @throws NumberFormatException if a port value isn't an integer
+	 *
+	 * @throws NumberFormatException
+	 *             if a port value isn't an integer
 	 */
 	public static PortRange valueOf(int index, String value)
 	{
@@ -189,8 +192,8 @@ public final class PortRange implements Serializable
 	 */
 	public boolean contains(int port){
 		Preconditions.checkArgument(port > 0);
-		return (!isLowerBounded() || lowerBound <= port) &&
-		(!isUpperBounded() || port <= upperBound);
+		return (isLowerBounded()?lowerBound <= port:true) &&
+		(isUpperBounded()?port <= upperBound:true);
 	}
 
 	public boolean contains(PortRange range){

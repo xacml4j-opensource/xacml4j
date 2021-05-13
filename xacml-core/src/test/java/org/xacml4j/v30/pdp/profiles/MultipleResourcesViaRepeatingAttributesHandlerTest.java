@@ -31,7 +31,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -67,8 +69,8 @@ public class MultipleResourcesViaRepeatingAttributesHandlerTest
 				.entity(
 						Entity.builder()
 						.attribute(
-						Attribute.builder("testId1").value(StringExp.of("value0")).build(),
-						Attribute.builder("testId2").value(StringExp.of("value1")).build()).build())
+						Attribute.builder("testId1").value(StringExp.valueOf("value0")).build(),
+						Attribute.builder("testId2").value(StringExp.valueOf("value1")).build()).build())
 				.build();
 
 		Category resource1 = Category
@@ -76,8 +78,8 @@ public class MultipleResourcesViaRepeatingAttributesHandlerTest
 				.entity(
 						Entity.builder()
 						.attribute(
-						Attribute.builder("testId3").value(StringExp.of("value0")).build(),
-						Attribute.builder("testId4").value(StringExp.of("value1")).build()).build())
+						Attribute.builder("testId3").value(StringExp.valueOf("value0")).build(),
+						Attribute.builder("testId4").value(StringExp.valueOf("value1")).build()).build())
 				.build();
 
 		Category subject = Category
@@ -85,15 +87,12 @@ public class MultipleResourcesViaRepeatingAttributesHandlerTest
 				.entity(
 						Entity.builder()
 						.attribute(
-						Attribute.builder("testId7").value(StringExp.of("value0")).build(),
-						Attribute.builder("testId8").value(StringExp.of("value1")).build()).build())
+						Attribute.builder("testId7").value(StringExp.valueOf("value0")).build(),
+						Attribute.builder("testId8").value(StringExp.valueOf("value1")).build()).build())
 				.build();
 
-		RequestContext context = RequestContext
-				.builder()
-				.returnPolicyIdList(false)
-				.attributes(subject, resource0, resource1)
-				.build();
+		RequestContext context = new RequestContext(false,
+				Arrays.asList(subject, resource0, resource1));
 
 		Capture<RequestContext> c0 = new Capture<RequestContext>();
 		Capture<RequestContext> c1 = new Capture<RequestContext>();
@@ -128,8 +127,8 @@ public class MultipleResourcesViaRepeatingAttributesHandlerTest
 				.entity(
 						Entity.builder()
 						.attribute(
-								Attribute.builder("testId1").value(StringExp.of("value0")).build(),
-								Attribute.builder("testId2").value(StringExp.of("value1")).build()).build())
+								Attribute.builder("testId1").value(StringExp.valueOf("value0")).build(),
+								Attribute.builder("testId2").value(StringExp.valueOf("value1")).build()).build())
 				.build();
 
 
@@ -137,16 +136,13 @@ public class MultipleResourcesViaRepeatingAttributesHandlerTest
 				.builder(Categories.SUBJECT_ACCESS)
 				.entity(Entity.builder()
 						.attribute(
-								Attribute.builder("testId7").value(StringExp.of("value0")).build(),
-								Attribute.builder("testId8").value(StringExp.of("value1")).build())
+								Attribute.builder("testId7").value(StringExp.valueOf("value0")).build(),
+								Attribute.builder("testId8").value(StringExp.valueOf("value1")).build())
 						.build())
 				.build();
 
-		RequestContext context = RequestContext
-				.builder()
-				.returnPolicyIdList(false)
-				.attributes(subject, resource0)
-				.build();
+		RequestContext context = new RequestContext(false,
+				Arrays.asList(subject, resource0));
 
 		Capture<RequestContext> c0 = new Capture<RequestContext>();
 
@@ -166,7 +162,8 @@ public class MultipleResourcesViaRepeatingAttributesHandlerTest
 	@Test
 	public void testWithEmptyRequest()
 	{
-		RequestContext context = RequestContext.builder().build();
+		RequestContext context = new RequestContext(false,
+				Collections.<Category>emptyList());
 
 		Capture<RequestContext> c0 = new Capture<RequestContext>();
 

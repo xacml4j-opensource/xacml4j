@@ -30,7 +30,6 @@ import org.xacml4j.v30.EvaluationException;
 import org.xacml4j.v30.ExpressionVisitor;
 import org.xacml4j.v30.ValueType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
@@ -41,7 +40,6 @@ public abstract class BaseAttributeExp<T>
 
 	private final T value;
 	private final AttributeExpType type;
-	private final int hashCode;
 
 	protected BaseAttributeExp(AttributeExpType attrType,
 			T attrValue) {
@@ -49,7 +47,6 @@ public abstract class BaseAttributeExp<T>
 		Preconditions.checkNotNull(attrValue);
 		this.type = attrType;
 		this.value = attrValue;
-		this.hashCode = Objects.hashCode(type, value);
 	}
 
 	@Override
@@ -75,14 +72,15 @@ public abstract class BaseAttributeExp<T>
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).
+		return Objects.toStringHelper(this).
 		add("Value", value).
-		add("Type", type).toString();
+		add("Type", getType()).toString();
 	}
 
 	@Override
 	public int hashCode(){
-		return hashCode;
+		return Objects.hashCode(
+				getType(), value);
 	}
 
 	@Override
@@ -91,7 +89,10 @@ public abstract class BaseAttributeExp<T>
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(Object o){
+		if(o == null){
+			return false;
+		}
 		if(o == this){
 			return true;
 		}

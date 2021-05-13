@@ -130,7 +130,7 @@ public class HigherOrderFunctions
 				break;
 			}
 		}
-		return BooleanExp.of(result);
+		return BooleanExp.create(result);
 	}
 
 	@XacmlFuncSpec(id="urn:oasis:names:tc:xacml:1.0:function:any-of-all")
@@ -237,7 +237,10 @@ public class HigherOrderFunctions
 				return false;
 			}
 			FunctionReference ref = (FunctionReference)exp;
-			return ref.getNumberOfParams() == 1;
+			if(ref.getNumberOfParams() != 1){
+				return false;
+			}
+			return true;
 		}
 	}
 }

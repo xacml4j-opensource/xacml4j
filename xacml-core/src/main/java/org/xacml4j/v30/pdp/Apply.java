@@ -31,7 +31,6 @@ import org.xacml4j.v30.ExpressionVisitor;
 import org.xacml4j.v30.ValueExpression;
 import org.xacml4j.v30.ValueType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -125,10 +124,10 @@ public class Apply implements Expression
 
 	@Override
 	public String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("function", spec)
-		                  .add("arguments", arguments)
-		                  .toString();
+		return Objects.toStringHelper(this)
+		.add("function", spec)
+		.add("arguments", arguments)
+		.toString();
 	}
 
 	public boolean equals(Object o){

@@ -30,7 +30,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Node;
 import org.xacml4j.v30.Attribute;
@@ -59,33 +58,28 @@ public class JsonEntityMarshallingTest
 	@Before
 	public void init(){
 		this.json = new GsonBuilder()
-				.registerTypeAdapter(Category.class, new CategoryAdapter())
 				.registerTypeAdapter(Attribute.class, new AttributeSerializer())
 				.registerTypeAdapter(Attribute.class, new AttributeDeserializer())
+                .registerTypeAdapter(Category.class, new CategoryAdapter())
 				.create();
 	}
-
-	/**
-	 * FIXME: https://travis-ci.org/github/xacml4j-opensource/xacml4j/jobs/771024841
-	 * @throws Exception
-	 */
+	
 	@Test
-	@Ignore
 	public void testEntityMarshall() throws Exception
 	{
 		Entity entity = Entity.builder()
 				.content(sampleContent1())
 				.attribute(Attribute
 						.builder("testId3")
-						.value(StringExp.of("aaa"))
-						.value(StringExp.of("bbbb"))
-						.value(StringExp.of("cccc"))
+						.value(StringExp.valueOf("aaa"))
+						.value(StringExp.valueOf("bbbb"))
+						.value(StringExp.valueOf("cccc"))
 						.build())
 				.attribute(Attribute
 						.builder("testId4")
-						.value(StringExp.of("zzzz"))
-						.value(StringExp.of("aaaa"))
-						.value(StringExp.of("cccc"))
+						.value(StringExp.valueOf("zzzz"))
+						.value(StringExp.valueOf("aaaa"))
+						.value(StringExp.valueOf("cccc"))
 						.build())
 				.build();
 		Category a = Category.builder()
@@ -93,7 +87,7 @@ public class JsonEntityMarshallingTest
 		.entity(Entity.builder()
 				.attribute(Attribute
 						.builder("testId1")
-						.value(EntityExp.of(entity))
+						.value(EntityExp.valueOf(entity))
 						.build())
 			    .build())
 	    .build();

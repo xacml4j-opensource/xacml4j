@@ -62,16 +62,16 @@ public class AttributeSelectorTest
 				.mustBePresent(true)
 				.build();
 		Capture<AttributeSelectorKey> c = new Capture<AttributeSelectorKey>();
-		expect(context.resolve(capture(c))).andReturn(DateExp.of("1992-03-21").toBag());
+		expect(context.resolve(capture(c))).andReturn(DateExp.valueOf("1992-03-21").toBag());
 		replay(context);
 		Expression v = ref.evaluate(context);
-		assertEquals(DateExp.of("1992-03-21").toBag(), v);
+		assertEquals(DateExp.valueOf("1992-03-21").toBag(), v);
 		assertEquals(ref.getReferenceKey(), c.getValue());
 		verify(context);
 	}
 
 	@Test
-	public void testMustBePresenFalseAndReturnsNonEmptyBag() throws EvaluationException
+	public void testMustBePresentFalseAndReturnsNonEmptyBag() throws EvaluationException
 	{
 		AttributeSelector ref = AttributeSelector
 				.builder()
@@ -81,16 +81,16 @@ public class AttributeSelectorTest
 				.mustBePresent(false)
 				.build();
 		Capture<AttributeSelectorKey> c = new Capture<AttributeSelectorKey>();
-		expect(context.resolve(capture(c))).andReturn(DateExp.of("1992-03-21").toBag());
+		expect(context.resolve(capture(c))).andReturn(DateExp.valueOf("1992-03-21").toBag());
 		replay(context);
 		Expression v = ref.evaluate(context);
-		assertEquals(DateExp.of("1992-03-21").toBag(), v);
+		assertEquals(DateExp.valueOf("1992-03-21").toBag(), v);
 		assertEquals(ref.getReferenceKey(), c.getValue());
 		verify(context);
 	}
 
 	@Test(expected=AttributeReferenceEvaluationException.class)
-	public void testMustBePresenTrueAndReturnsEmptyBag() throws EvaluationException
+	public void testMustBePresentTrueAndReturnsEmptyBag() throws EvaluationException
 	{
 		AttributeSelector ref = AttributeSelector
 				.builder()
@@ -107,7 +107,7 @@ public class AttributeSelectorTest
 	}
 
 	@Test
-	public void testMustBePresenFalseAndReturnsEmptyBag() throws EvaluationException
+	public void testMustBePresentFalseAndReturnsEmptyBag() throws EvaluationException
 	{
 		AttributeSelector ref = AttributeSelector
 				.builder()
@@ -126,7 +126,7 @@ public class AttributeSelectorTest
 	}
 
 	@Test
-	public void testMustBePresenFalseAndContextThrowsAttributeReferenceEvaluationException() throws EvaluationException
+	public void testMustBePresentFalseAndContextThrowsAttributeReferenceEvaluationException() throws EvaluationException
 	{
 		AttributeSelector ref = AttributeSelector
 				.builder()
@@ -147,7 +147,7 @@ public class AttributeSelectorTest
 	}
 
 	@Test
-	public void testMustBePresenFalseAndContextThrowsRuntimeException() throws EvaluationException
+	public void testMustBePresentFalseAndContextThrowsRuntimeException() throws EvaluationException
 	{
 		AttributeSelector ref = AttributeSelector
 				.builder()
@@ -166,7 +166,7 @@ public class AttributeSelectorTest
 	}
 
 	@Test(expected=AttributeReferenceEvaluationException.class)
-	public void testMustBePresenTrueAndContextThrowsRuntimeException() throws EvaluationException
+	public void testMustBePresentTrueAndContextThrowsRuntimeException() throws EvaluationException
 	{
 		AttributeSelector ref = AttributeSelector
 				.builder()
@@ -183,7 +183,7 @@ public class AttributeSelectorTest
 	}
 
 	@Test(expected=AttributeReferenceEvaluationException.class)
-	public void testMustBePresenTrueAndContextThrowsAttributeReferenceEvaluationException() throws EvaluationException
+	public void testMustBePresentTrueAndContextThrowsAttributeReferenceEvaluationException() throws EvaluationException
 	{
 		AttributeSelector ref = AttributeSelector
 				.builder()

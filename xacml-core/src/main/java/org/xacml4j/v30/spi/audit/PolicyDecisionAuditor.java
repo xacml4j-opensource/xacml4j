@@ -33,7 +33,6 @@ public interface PolicyDecisionAuditor
 	 * Generates an audit event from a given
 	 * {@link Result} and {@link RequestContext}
 	 *
-	 * @param pdp policy decision point reference
 	 * @param result a decision result
 	 * @param req a decision request
 	 */

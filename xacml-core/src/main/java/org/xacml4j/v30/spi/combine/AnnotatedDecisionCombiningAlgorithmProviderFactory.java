@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xacml4j.util.CglibInvocationFactory;
+import org.xacml4j.util.DefaultInvocationFactory;
 import org.xacml4j.util.Invocation;
 import org.xacml4j.util.InvocationFactory;
 import org.xacml4j.util.Reflections;
@@ -48,7 +48,7 @@ class AnnotatedDecisionCombiningAlgorithmProviderFactory
 {
 	private final static Logger log = LoggerFactory.getLogger(AnnotatedDecisionCombiningAlgorithmProviderFactory.class);
 
-	private final InvocationFactory invocationFactory;
+	private InvocationFactory invocationFactory;
 
 	public AnnotatedDecisionCombiningAlgorithmProviderFactory(
 			InvocationFactory invocationFactory){
@@ -57,7 +57,7 @@ class AnnotatedDecisionCombiningAlgorithmProviderFactory
 	}
 
 	public AnnotatedDecisionCombiningAlgorithmProviderFactory(){
-		this(new CglibInvocationFactory());
+		this(new DefaultInvocationFactory());
 	}
 
 	/**
@@ -86,7 +86,7 @@ class AnnotatedDecisionCombiningAlgorithmProviderFactory
 
 	DecisionCombiningAlgorithm<Rule> createRuleDecisionCombineAlgorithm(Method m)
 	{
-		validateDecisionCombiningMethod(m);
+		validateDecisionCombineMethod(m);
 
 		XacmlRuleDecisionCombiningAlgorithm algo = m.getAnnotation(XacmlRuleDecisionCombiningAlgorithm.class);
 		Preconditions.checkState(algo != null,
@@ -96,12 +96,12 @@ class AnnotatedDecisionCombiningAlgorithmProviderFactory
 			log.debug("Creating rule decision combining" +
 					" algorithm=\"{}\" from method=\"{}\"", algo.value(), m.getName());
 		}
-		return createDecisionCombiningAlgorithm(algo.value(), invocationFactory.<Decision>create(null, m));
+		return createDecisionCombineAlgorithm(algo.value(), invocationFactory.<Decision>create(null, m));
 	}
 
 	DecisionCombiningAlgorithm<CompositeDecisionRule> createPolicyDecisionCombineAlgorithm(Method m)
 	{
-		validateDecisionCombiningMethod(m);
+		validateDecisionCombineMethod(m);
 		XacmlPolicyDecisionCombiningAlgorithm algo = m.getAnnotation(XacmlPolicyDecisionCombiningAlgorithm.class);
 		Preconditions.checkState(algo != null,
 				"Invalid decision combining algorithm method=\"%s\", annotation=\"%s\" must be present",
@@ -110,11 +110,11 @@ class AnnotatedDecisionCombiningAlgorithmProviderFactory
 			log.debug("Creating policy decision combining" +
 					" algorithm=\"{}\" from method=\"{}\"", algo.value(), m.getName());
 		}
-		return createDecisionCombiningAlgorithm(algo.value(), invocationFactory.<Decision>create(null, m));
+		return createDecisionCombineAlgorithm(algo.value(), invocationFactory.<Decision>create(null, m));
 	}
 
-	private  <D extends DecisionRule> DecisionCombiningAlgorithm<D> createDecisionCombiningAlgorithm(
-			final String algorithmId, final Invocation<Decision> invocation)
+	private  <D extends DecisionRule> DecisionCombiningAlgorithm<D> createDecisionCombineAlgorithm(
+			final String algorithmId,  final Invocation<Decision> invocation)
 	{
 		Preconditions.checkNotNull(algorithmId);
 		Preconditions.checkNotNull(invocation);
@@ -136,7 +136,7 @@ class AnnotatedDecisionCombiningAlgorithmProviderFactory
 		};
 	}
 
-	private void validateDecisionCombiningMethod(Method m)
+	private void validateDecisionCombineMethod(Method m)
 	{
 		Preconditions.checkArgument(
 				Modifier.isStatic(m.getModifiers()),

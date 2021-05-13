@@ -30,7 +30,6 @@ import org.xacml4j.v30.Expression;
 import org.xacml4j.v30.ValueExpression;
 import org.xacml4j.v30.ValueType;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
@@ -80,10 +79,10 @@ public class VariableDefinition implements PolicyElement
 
 	@Override
 	public String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("variableId", variableId)
-		                  .add("expression", expression)
-		                  .toString();
+		return Objects.toStringHelper(this)
+				.add("variableId", variableId)
+				.add("expression", expression)
+				.toString();
 	}
 
 	@Override
@@ -107,11 +106,9 @@ public class VariableDefinition implements PolicyElement
 	}
 
 	/**
-	 * Evaluates variable definition and caches
+	 * Evaluates  variable definition and caches
 	 * evaluation result in the current
-	 * {@link EvaluationContext}
-	 * @param context evaluation context
-	 * @return evaluated expression
+	 * {@link EvaluationContext} evaluation context
 	 */
 	public ValueExpression evaluate(EvaluationContext context) throws EvaluationException
 	{

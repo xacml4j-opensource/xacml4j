@@ -22,7 +22,6 @@ package org.xacml4j.v30;
  * #L%
  */
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -32,7 +31,6 @@ public final class Status
 	private final StatusCode code;
 	private final String message;
 	private final StatusDetail detail;
-	private final int hashCode;
 
 	/**
 	 * Creates status with a given status
@@ -45,7 +43,6 @@ public final class Status
 		this.code = b.code;
 		this.message = b.message;
 		this.detail = b.detail;
-		this.hashCode = Objects.hashCode(code, message, detail);
 	}
 
 	public static Builder processingError(){
@@ -110,11 +107,11 @@ public final class Status
 
 	@Override
 	public String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("code", code)
-		                  .add("message", message)
-		                  .add("detail", detail)
-		                  .toString();
+		return Objects.toStringHelper(this)
+				.add("code", code)
+				.add("message", message)
+				.add("detail", detail)
+				.toString();
 	}
 
 	@Override
@@ -133,7 +130,7 @@ public final class Status
 
 	@Override
 	public int hashCode(){
-		return hashCode;
+		return Objects.hashCode(code, message, detail);
 	}
 
 	public static class Builder
@@ -155,7 +152,7 @@ public final class Status
 		}
 
 		public Builder message(String format, Object ...args){
-			this.message = Strings.isNullOrEmpty(format) ? format : String.format(format, args);
+			this.message = (Strings.isNullOrEmpty(format))?format:String.format(format, args);
 			return this;
 		}
 

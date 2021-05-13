@@ -32,7 +32,6 @@ public interface FunctionParametersValidator
 	/**
 	 * Validates given function arguments
 	 *
-	 * @param spec function specification
 	 * @param arguments a function arguments
 	 * @return {@code true} if function arguments are valid
 	 */

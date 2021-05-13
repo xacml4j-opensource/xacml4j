@@ -46,7 +46,6 @@ import org.xacml4j.v30.ValueExpression;
 import org.xacml4j.v30.XPathVersion;
 import org.xacml4j.v30.types.XPathExp;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Ticker;
@@ -75,7 +74,7 @@ abstract class DelegatingEvaluationContext implements EvaluationContext
 	public EvaluationContext createExtIndeterminateEvalContext() {
 		return delegate.createExtIndeterminateEvalContext();
 	}
-
+	
 	@Override
 	public boolean isExtendedIndeterminateEval() {
 		return delegate.isExtendedIndeterminateEval();
@@ -291,7 +290,7 @@ abstract class DelegatingEvaluationContext implements EvaluationContext
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("delegate", delegate).toString();
+		return Objects.toStringHelper(this).add("delegate", delegate).toString();
 	}
 
 	@Override
@@ -303,6 +302,6 @@ abstract class DelegatingEvaluationContext implements EvaluationContext
 	public boolean equals(Object o) {
 		return o == this ||
 				(o instanceof DelegatingEvaluationContext) &&
-						delegate.equals(((DelegatingEvaluationContext) o).delegate);
+						delegate.equals(((DelegatingEvaluationContext) o).getDelegate());
 	}
 }

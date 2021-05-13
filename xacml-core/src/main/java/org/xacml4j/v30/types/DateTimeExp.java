@@ -39,28 +39,28 @@ public final class DateTimeExp
 		super(XacmlTypes.DATETIME, value);
 	}
 			
-	public static DateTimeExp of(String v){
+	public static DateTimeExp valueOf(String v){
 		return new DateTimeExp(DateTime.create(v));
 	}
 	
-	public static DateTimeExp of(DateTime v){
+	public static DateTimeExp valueOf(DateTime v){
 		return new DateTimeExp(v);
 	}
 	
-	public static DateTimeExp of(XMLGregorianCalendar v){
+	public static DateTimeExp valueOf(XMLGregorianCalendar v){
 		return new DateTimeExp(DateTime.create(v));
 	}
 	
-	public static DateTimeExp of(Calendar v){
+	public static DateTimeExp valueOf(Calendar v){
 		return new DateTimeExp(DateTime.create(v));
 	}
 	
-	public static DateTimeExp of(StringExp v){
-		return of(v.getValue());
+	public static DateTimeExp valueOf(StringExp v){
+		return valueOf(v.getValue());
 	}
 	
 	public StringExp toStringExp(){
-		return StringExp.of(getValue().toXacmlString());
+		return StringExp.valueOf(getValue().toXacmlString());
 	}
 	
 	@Override

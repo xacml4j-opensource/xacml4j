@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.xacml4j.util.CglibInvocationFactory;
+import org.xacml4j.util.DefaultInvocationFactory;
 import org.xacml4j.util.InvocationFactory;
 import org.xacml4j.util.Reflections;
 import org.xacml4j.v30.XacmlSyntaxException;
@@ -72,7 +73,7 @@ public final class AnnotationBasedFunctionProvider extends BaseFunctionProvider
 	}
 
 	public AnnotationBasedFunctionProvider(Object instance) throws Exception{
-		this(instance, new CglibInvocationFactory());
+		this(instance, new DefaultInvocationFactory());
 	}
 
 	private List<FunctionSpec> findFunctions(Class<?> clazz, Object instance)

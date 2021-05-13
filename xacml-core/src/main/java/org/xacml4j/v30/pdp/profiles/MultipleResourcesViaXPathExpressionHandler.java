@@ -93,7 +93,8 @@ final class MultipleResourcesViaXPathExpressionHandler extends AbstractRequestCo
 			List<Result> results = new LinkedList<Result>();
 			for(List<Category> requestAttr : cartesian)
 			{
-				RequestContext req = RequestContext.builder().copyOf(request, requestAttr).build();
+				RequestContext req = new RequestContext(request.isReturnPolicyIdList(),
+						requestAttr, request.getRequestDefaults());
 				if(log.isDebugEnabled()){
 					log.debug("Created request=\"{}\"", req);
 				}
@@ -157,7 +158,7 @@ final class MultipleResourcesViaXPathExpressionHandler extends AbstractRequestCo
 						Attribute.builder(CONTENT_SELECTOR)
 						.issuer(a.getIssuer())
 						.includeInResult(a.isIncludeInResult())
-						.value(XPathExp.of(xpath, attributes.getCategoryId()))
+						.value(XPathExp.valueOf(xpath, attributes.getCategoryId()))
 						.build();
 				newAttributes.add(selectorAttr);
 				continue;

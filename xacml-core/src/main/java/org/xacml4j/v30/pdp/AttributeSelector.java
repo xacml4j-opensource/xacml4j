@@ -31,7 +31,6 @@ import org.xacml4j.v30.EvaluationContext;
 import org.xacml4j.v30.EvaluationException;
 import org.xacml4j.v30.ExpressionVisitor;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 public class AttributeSelector extends
@@ -57,10 +56,10 @@ public class AttributeSelector extends
 
 	@Override
 	public String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("selectorKey", selectorKey)
-		                  .add("mustBePresent", isMustBePresent())
-		                  .toString();
+		return Objects.toStringHelper(this)
+		.add("selectorKey", selectorKey)
+		.add("mustBePresent", isMustBePresent())
+		.toString();
 	}
 
 	@Override

@@ -89,7 +89,7 @@ public class DecisionCombiningAlgorithmProviderImpl implements DecisionCombining
 		DecisionCombiningAlgorithm<Rule> oldAlgo = ruleAlgo.put(algorithm.getId(), algorithm);
 		if(oldAlgo != null){
 			throw new IllegalArgumentException(
-					String.format("Rule algorithm with identifier=\"%s\" already exists", algorithm));
+					String.format("Rule algorithm with identifier=\"%s\" already exist", algorithm));
 		}
 	}
 
@@ -100,9 +100,8 @@ public class DecisionCombiningAlgorithmProviderImpl implements DecisionCombining
 				algorithm.getId(), algorithm);
 		if(oldAlgo != null){
 			throw new IllegalArgumentException(
-					String.format(
-							"Policy decision combining algorithm with identifier=\"%s\" already exists",
-							algorithm));
+					String.format("Policy decision combining" +
+							" algorithm with identifier=\"%s\" already exist", algorithm));
 		}
 	}
 

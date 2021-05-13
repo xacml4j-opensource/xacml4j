@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableCollection;
@@ -200,7 +199,7 @@ public class Result
 
 	@Override
 	public String toString(){
-		return MoreObjects
+		return Objects
 				.toStringHelper(this)
 				.add("status", status)
 				.add("decision", decision)

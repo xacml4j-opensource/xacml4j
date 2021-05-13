@@ -22,8 +22,6 @@ package org.xacml4j.v30.pdp;
  * #L%
  */
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xacml4j.v30.EvaluationContext;
 import org.xacml4j.v30.EvaluationException;
 import org.xacml4j.v30.Expression;
@@ -32,7 +30,6 @@ import org.xacml4j.v30.ValueType;
 import org.xacml4j.v30.types.BooleanExp;
 import org.xacml4j.v30.types.XacmlTypes;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
@@ -45,8 +42,6 @@ import com.google.common.base.Preconditions;
  */
 public class Condition implements PolicyElement
 {
-	private final static Logger log = LoggerFactory.getLogger(Condition.class);
-
 	private final Expression predicate;
 
 	/**
@@ -93,11 +88,9 @@ public class Condition implements PolicyElement
 			return result.getValue()?ConditionResult.TRUE:ConditionResult.FALSE;
 		}catch(EvaluationException e){
 			context.setEvaluationStatus(e.getStatus());
-			log.debug("Evaluation FAILED.", e);
 			return ConditionResult.INDETERMINATE;
 		}catch(Exception e){
 			context.setEvaluationStatus(Status.processingError().build());
-			log.debug("Evaluation FAILED", e);
 			return ConditionResult.INDETERMINATE;
 		}
 	}
@@ -115,7 +108,7 @@ public class Condition implements PolicyElement
 
 	@Override
 	public String toString(){
-		return MoreObjects
+		return Objects
 				.toStringHelper(this)
 				.add("predicate", predicate)
 				.toString();

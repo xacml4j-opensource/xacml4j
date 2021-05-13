@@ -37,7 +37,7 @@ import org.xacml4j.v30.XacmlSyntaxException;
 public class VersionTest
 {
 	@Test
-	public void testCreateVersion()
+	public void testCreateVersion() throws XacmlSyntaxException
 	{
 		Version v1 = Version.parse("1.0");
 		Version v2 = Version.parse("1.0");
@@ -50,7 +50,7 @@ public class VersionTest
 	}
 
 	@Test
-	public void testLessThanVersion()
+	public void testLessThanVersion() throws XacmlSyntaxException
 	{
 		Version v1 = Version.parse("1.1");
 		Version v2 = Version.parse("1.0");
@@ -65,7 +65,7 @@ public class VersionTest
 	}
 
 	@Test
-	public void testDefaultVersion()
+	public void testDefaultVersion() throws XacmlSyntaxException
 	{
 		Version v = Version.parse(null);
 		assertEquals("1.0.0", v.getValue());
@@ -78,13 +78,14 @@ public class VersionTest
 	}
 
 	@Test(expected=IllegalArgumentException.class)
-	public void testUnparseableVersion()
+	public void testUnparsableVersion() throws XacmlSyntaxException
 	{
 		Version.parse("1.a....");
 	}
 
 	@Test
-	public void sortVersion() {
+	public void sortVersion() throws Exception
+	{
 		Collection<Version> versions = new LinkedList<Version>();
 		versions.add(Version.parse("1.0.0"));
 		versions.add(Version.parse("1.0.1"));

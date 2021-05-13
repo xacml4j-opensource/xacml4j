@@ -9,7 +9,7 @@
 	<groupId>org.xacml4j</groupId>
 	<artifactId>xacml</artifactId>
 	<packaging>pom</packaging>
-	<version>1.5.0-SNAPSHOT</version>
+	<version>1.3.3-SNAPSHOT</version>
 	<name>Xacml4J Project</name>
 	<url>https://github.com/xacml4j/xacml4j</url>
 	<description>
@@ -19,6 +19,7 @@
 
 	<modules>
 		<module>xacml-core</module>
+		<module>xacml-spring</module>
 		<module>xacml-json</module>
 		<module>xacml-test</module>
 		<module>xacml-conformance-tests</module>
@@ -26,10 +27,10 @@
 
 	<properties>
 		<junit.version>4.13.1</junit.version>
-		<slf4j.version>1.7.30</slf4j.version>
-		<log4j.version>2.14.0</log4j.version>
+		<slf4j.version>1.6.1</slf4j.version>
+		<log4j.version>1.2.14</log4j.version>
 		<easymock.version>3.1</easymock.version>
-		<guava.version>24.1.1-jre</guava.version>
+		<guava.version>13.0.1</guava.version>
 		<xml.resolver.version>1.2</xml.resolver.version>
 		<yammer.metrics.version>3.0.2</yammer.metrics.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -80,16 +81,16 @@
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.easymock</groupId>
@@ -131,25 +132,28 @@
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j-api</artifactId>
-				<version>${log4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j-core</artifactId>
-				<version>${log4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j-slf4j-impl</artifactId>
-				<version>${log4j.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>${slf4j.version}</version>
 				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j.version}</version>
+				<scope>runtime</scope>
 			</dependency>
 			<dependency>
 				<groupId>cglib</groupId>
@@ -158,33 +162,16 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>3.2.0</version>
-					<inherited>true</inherited>
-				</plugin>
-				<plugin>
-					<inherited>true</inherited>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>2.5.1</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-
 		<plugins>
 			<plugin>
 				<inherited>true</inherited>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>1.6</source>
+					<target>1.6</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -244,6 +231,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
 				<inherited>true</inherited>
 			</plugin>
 			<!-- Coverage Report -->
@@ -257,8 +245,8 @@
 	</reporting>
 
 	<scm>
-		<connection>scm:git:git@github.com:xacml4j-opensource/xacml4j.git</connection>
-		<developerConnection>scm:git:git@github.com:xacml4j-opensource/xacml4j.git</developerConnection>
-		<url>scm:git:git@github.com:xacml4j-opensource/xacml4j.git</url>
+		<connection>scm:git:git@github.com:xacml4j/xacml4j.git</connection>
+		<developerConnection>scm:git:git@github.com:xacml4j/xacml4j.git</developerConnection>
+		<url>scm:git:git@github.com:xacml4j/xacml4j.git</url>
 	</scm>
 </project>

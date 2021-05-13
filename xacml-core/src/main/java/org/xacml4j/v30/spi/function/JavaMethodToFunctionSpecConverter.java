@@ -70,12 +70,12 @@ class JavaMethodToFunctionSpecConverter
 	{
 		Preconditions.checkArgument(m != null, "Method can not be null");
 		if(m.getReturnType().equals(Void.TYPE)){
-			throw new XacmlSyntaxException(
-					"Method=\"%s\" must have other then void return type", m.getName());
+			throw new XacmlSyntaxException("Method=\"%s\" must " +
+					"have other then void return type", m.getName());
 		}
 		if(!Expression.class.isAssignableFrom(m.getReturnType())){
-			throw new XacmlSyntaxException(
-					"Method=\"%s\" must return XACML expression", m.getName());
+			throw new XacmlSyntaxException("Method=\"%s\" must " +
+					"return XACML expression", m.getName());
 		}
 		XacmlFuncSpec funcId = m.getAnnotation(XacmlFuncSpec.class);
 		if(funcId == null){
@@ -105,12 +105,14 @@ class JavaMethodToFunctionSpecConverter
 						m.getName()));
 			}
 			if (params[i][0] instanceof XacmlFuncParamEvaluationContext) {
-				if (!types[i].isAssignableFrom(EvaluationContext.class)) {
-					throw new IllegalArgumentException("XACML evaluation context "
+				if (!types[i].isInstance(EvaluationContext.class)) {
+					// FIXME: why is the exception not thrown?
+					new IllegalArgumentException("XACML evaluation context "
 											+ "annotation annotates wrong parameter type");
 				}
 				if (i > 0) {
-					throw new IllegalArgumentException(String.format(
+					// FIXME: why is the exception not thrown?
+					new IllegalArgumentException(String.format(
 							"XACML evaluation context parameter must "
 									+ "be a first parameter "
 									+ "in the method=\"%s\" signature", m.getName()));
@@ -188,9 +190,9 @@ class JavaMethodToFunctionSpecConverter
 				}
 				if (m.isVarArgs() && i < params.length - 1) {
 					throw new IllegalArgumentException(
-							"Found varArg parameter "
+							String.format("Found varArg parameter "
 									+ "declaration in incorrect place, "
-									+ "varArg parameter must be a last parameter in the method");
+									+ "varArg parameter must be a last parameter in the method"));
 				}
 				XacmlFuncParamVarArg param = (XacmlFuncParamVarArg) params[i][0];
 				Optional<AttributeExpType> type = XacmlTypes.getType(param.typeId());
@@ -283,11 +285,10 @@ class JavaMethodToFunctionSpecConverter
 		try {
 			return clazz.newInstance();
 		} catch (Exception e) {
-			throw new IllegalArgumentException(
-					String.format(
-						"Failed to build instance of function return type resolver, class=\"%s\"",
-						clazz.getName()),
-					e);
+			throw new IllegalArgumentException(String.format(
+					"Failed with error=\"%s\" to build instance of "
+							+ "function return type resolver, class=\"%s\"", e
+							.getMessage(), clazz.getName()));
 		}
 	}
 
@@ -296,11 +297,10 @@ class JavaMethodToFunctionSpecConverter
 		try {
 			return clazz.newInstance();
 		} catch (Exception e) {
-			throw new IllegalArgumentException(
-					String.format(
-							"Failed to build instance of function parameter validator, class=\"%s\"",
-							clazz.getName()),
-					e);
+			throw new IllegalArgumentException(String.format(
+					"Failed with error=\"%s\" to build instance of "
+							+ "function parameter validator, class=\"%s\"", e
+							.getMessage(), clazz.getName()));
 		}
 	}
 

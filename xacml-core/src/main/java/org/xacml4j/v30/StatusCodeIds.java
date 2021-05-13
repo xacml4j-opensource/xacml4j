@@ -74,6 +74,9 @@ public enum StatusCodeIds implements StatusCodeId
 				if(o == this){
 					return true;
 				}
+				if(o == null){
+					return false;
+				}
 				if(!(o instanceof StatusCodeId)){
 					return false;
 				}

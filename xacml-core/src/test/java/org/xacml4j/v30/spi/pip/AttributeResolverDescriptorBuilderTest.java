@@ -41,7 +41,7 @@ public class AttributeResolverDescriptorBuilderTest
 {
 
 	@Test(expected=IllegalArgumentException.class)
-	public void testBuildDescriptorWithContextKeyReferringToThisDescriptor()
+	public void testBuildDescriptiorWithContextKeyReferringToThisDescriptor()
 	{
 		AttributeResolverDescriptorBuilder.builder(
 				"id", "name", "issuer", Categories.SUBJECT_ACCESS)

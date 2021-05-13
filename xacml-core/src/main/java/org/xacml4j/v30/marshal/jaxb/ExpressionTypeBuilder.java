@@ -24,7 +24,6 @@ package org.xacml4j.v30.marshal.jaxb;
 
 import javax.xml.bind.JAXBElement;
 
-import com.google.common.base.Optional;
 import org.oasis.xacml.v30.jaxb.ApplyType;
 import org.oasis.xacml.v30.jaxb.AttributeDesignatorType;
 import org.oasis.xacml.v30.jaxb.AttributeSelectorType;
@@ -93,9 +92,10 @@ interface ExpressionTypeBuilder
  			public JAXBElement<?> from(Expression e){
  	 			Preconditions.checkArgument(e instanceof AttributeExp);
  	 			AttributeExp v = (AttributeExp)e;
- 	 			Optional<TypeToXacml30> toXacml30 = TypeToXacml30.Types.getIndex().get(v.getType());
-				Preconditions.checkState(toXacml30.isPresent());
- 				return factory.createAttributeValue(toXacml30.get().toXacml30(v));
+ 	 			AttributeValueType exp = factory.createAttributeValueType();
+ 	 			exp.setDataType(v.getType().getDataTypeId());
+ 				exp.getContent().add(v.getValue());
+ 				return factory.createAttributeValue(exp);
  	 		}
  		},
  		ATTRIBUTE_DESIGNATOR(AttributeDesignator.class){

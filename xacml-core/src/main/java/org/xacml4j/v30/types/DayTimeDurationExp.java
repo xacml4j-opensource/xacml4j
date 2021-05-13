@@ -45,24 +45,24 @@ public final class DayTimeDurationExp extends BaseAttributeExp<DayTimeDuration>
 		super(XacmlTypes.DAYTIMEDURATION, value);
 	}
 	
-	public static DayTimeDurationExp of(DayTimeDuration v){
+	public static DayTimeDurationExp valueOf(DayTimeDuration v){
 		return new DayTimeDurationExp(v);
 	}
 	
-	public static DayTimeDurationExp of(Duration v){
+	public static DayTimeDurationExp valueOf(Duration v){
 		return new DayTimeDurationExp(v);
 	}
 	
-	public static DayTimeDurationExp of(String v){
+	public static DayTimeDurationExp valueOf(String v){
 		return new DayTimeDurationExp(DayTimeDuration.parse(v));
 	}
 	
-	public static DayTimeDurationExp of(StringExp v){
-		return of(v.getValue());
+	public static DayTimeDurationExp valueOf(StringExp v){
+		return valueOf(v.getValue());
 	}
 	
 	public StringExp toStringExp(){
-		return StringExp.of(getValue().toXacmlString());
+		return StringExp.valueOf(getValue().toXacmlString());
 	}
 
 	@Override

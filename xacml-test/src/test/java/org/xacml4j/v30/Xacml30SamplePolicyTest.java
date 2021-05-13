@@ -23,30 +23,31 @@ package org.xacml4j.v30;
  */
 
 
-import org.junit.Before;
 import org.junit.Test;
 import org.xacml4j.v30.pdp.PolicyDecisionPoint;
+import org.xacml4j.v30.types.BooleanExp;
 
 
 public class Xacml30SamplePolicyTest extends XacmlPolicyTestSupport
 {
-	private PolicyDecisionPoint pdp;
+	@Test
+	public void testCPNICompliance() throws Exception {
+		PolicyDecisionPoint pdp = builder("urn:cima:policy:compliance:cpni", "1.0")
+				.resolver(ExpectedAttributeResolverBuilder
+								.builder("test", Categories.SUBJECT_ACCESS)
+									.value("urn:comcast:names:1.0:subscriber:residential:cpni-secret-compliant", BooleanExp.valueOf(true))
+									.build())
+					.policyFromClasspath("v30-policy-test/policyset.xml")
+					.build();
 
-	@Before
-	public void init() throws Exception{
-
-		this.pdp = builder(
-				"urn:oasis:names:tc:xacml:2.0:conformance-test:IIC058:policy", "1.0")
-				.policy(getPolicy("v30-policy-test/test-policy.xml")).build();
+		verifyXacml30Response(pdp, "v30-policy-test/test-req.xml", "v30-policy-test/test-resp.xml");
 	}
 
 	@Test
-	public void testPermitResponse() throws Exception {
-		verifyXacml30Response(pdp, "v30-policy-test/test-permit-req.xml", "v30-policy-test/test-permit-resp.xml");
-	}
-
-	@Test
-	public void testDenyResponse() throws Exception {
-		verifyXacml30Response(pdp, "v30-policy-test/test-deny-req.xml", "v30-policy-test/test-deny-resp.xml");
+	public void testCPNIComplianceAttrsInRequest() throws Exception {
+		PolicyDecisionPoint pdp = builder("urn:cima:policy:compliance:cpni", "1.0")
+				.policyFromClasspath("v30-policy-test/policyset.xml")
+				.build();
+		verifyXacml30Response(pdp, "v30-policy-test/test-req2.xml", "v30-policy-test/test-resp2.xml");
 	}
 }

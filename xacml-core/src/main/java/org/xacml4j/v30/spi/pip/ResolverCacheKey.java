@@ -27,7 +27,6 @@ import java.util.List;
 
 import org.xacml4j.v30.BagOfAttributeExp;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -43,14 +42,12 @@ public final class ResolverCacheKey implements Serializable
 {
 	private static final long serialVersionUID = -6895205924708410228L;
 
-	private final String resolverId;
-	private final List<BagOfAttributeExp> keys;
-	private final int hashCode;
+	private String resolverId;
+	private List<BagOfAttributeExp> keys;
 
-	public ResolverCacheKey(Builder b) {
+	public ResolverCacheKey(Builder b){
 		this.resolverId = b.id;
 		this.keys = b.keysBuilder.build();
-		this.hashCode = Objects.hashCode(resolverId, keys);
 	}
 
 	public static Builder builder(){
@@ -59,16 +56,19 @@ public final class ResolverCacheKey implements Serializable
 
 	@Override
 	public int hashCode(){
-		return hashCode;
+		return Objects.hashCode(resolverId, keys);
 	}
 
 	@Override
 	public boolean equals(Object o)
 	{
-		if (o == this) {
+		if(o == this){
 			return true;
 		}
-		if (!(o instanceof ResolverCacheKey)) {
+		if(o == null){
+			return false;
+		}
+		if(!(o instanceof ResolverCacheKey)){
 			return false;
 		}
 		ResolverCacheKey k = (ResolverCacheKey)o;
@@ -77,10 +77,10 @@ public final class ResolverCacheKey implements Serializable
 
 	@Override
 	public String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("id", resolverId)
-		                  .add("keys", keys.toString())
-		                  .toString();
+		return Objects.toStringHelper(this)
+		.add("id", resolverId)
+		.add("keys", keys.toString())
+		.toString();
 	}
 
 	public static class Builder

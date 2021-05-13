@@ -32,7 +32,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -70,23 +72,23 @@ public class MultipleResourcesHandlerTest
 				.entity(
 						Entity.builder()
 						.attribute(
-								Attribute.builder("testId1").value(StringExp.of("value0")).build(),
-								Attribute.builder("testId2").value(StringExp.of("value1")).build()).build())
+								Attribute.builder("testId1").value(StringExp.valueOf("value0")).build(),
+								Attribute.builder("testId2").value(StringExp.valueOf("value1")).build()).build())
 				.build();
 		this.resource1 = Category.builder(Categories.RESOURCE)
 				.entity(
 						Entity.builder()
 						.attribute(
-						Attribute.builder("testId3").value(StringExp.of("value0")).build(),
-						Attribute.builder("testId4").value(StringExp.of("value1")).build()).build())
+						Attribute.builder("testId3").value(StringExp.valueOf("value0")).build(),
+						Attribute.builder("testId4").value(StringExp.valueOf("value1")).build()).build())
 				.build();
 
 		this.subject0 = Category.builder(Categories.SUBJECT_ACCESS)
 				.entity(
 						Entity.builder()
 						.attribute(
-								Attribute.builder("testId7").value(StringExp.of("value0")).build(),
-								Attribute.builder("testId8").value(StringExp.of("value1")).build()).build())
+								Attribute.builder("testId7").value(StringExp.valueOf("value0")).build(),
+								Attribute.builder("testId8").value(StringExp.valueOf("value1")).build()).build())
 				.build();
 
 
@@ -94,8 +96,8 @@ public class MultipleResourcesHandlerTest
 				.entity(
 						Entity.builder()
 						.attribute(
-						Attribute.builder("testId9").value(StringExp.of("value0")).build(),
-						Attribute.builder("testId10").value(StringExp.of("value1")).build()).build())
+						Attribute.builder("testId9").value(StringExp.valueOf("value0")).build(),
+						Attribute.builder("testId10").value(StringExp.valueOf("value1")).build()).build())
 				.build();
 	}
 
@@ -103,12 +105,8 @@ public class MultipleResourcesHandlerTest
 	public void testAllResultsAreDeny()
 	{
 
-		RequestContext request = RequestContext
-				.builder()
-				.returnPolicyIdList(false)
-				.combineDecision(true)
-				.attributes(subject0, subject1, resource0, resource1)
-				.build();
+		RequestContext request = new RequestContext(false, true,
+				Arrays.asList(subject0, subject1, resource0, resource1));
 
 		Capture<RequestContext> c0 = new Capture<RequestContext>();
 		Capture<RequestContext> c1 = new Capture<RequestContext>();
@@ -141,12 +139,10 @@ public class MultipleResourcesHandlerTest
 	@Test
 	public void testAllResultsArePermit()
 	{
-		RequestContext request = RequestContext
-				.builder()
-				.returnPolicyIdList(false)
-				.combineDecision(true)
-				.attributes(subject0, subject1, resource0, resource1)
-				.build();
+
+
+		RequestContext request = new RequestContext(false, true,
+				Arrays.asList(subject0, subject1, resource0, resource1));
 
 		Capture<RequestContext> c0 = new Capture<RequestContext>();
 		Capture<RequestContext> c1 = new Capture<RequestContext>();
@@ -180,12 +176,8 @@ public class MultipleResourcesHandlerTest
 	{
 
 
-		RequestContext request = RequestContext
-				.builder()
-				.returnPolicyIdList(false)
-				.combineDecision(true)
-				.attributes(subject0, subject1, resource0, resource1)
-				.build();
+		RequestContext request = new RequestContext(false, true,
+				Arrays.asList(subject0, subject1, resource0, resource1));
 
 		Capture<RequestContext> c0 = new Capture<RequestContext>();
 		Capture<RequestContext> c1 = new Capture<RequestContext>();
@@ -223,12 +215,8 @@ public class MultipleResourcesHandlerTest
 	{
 
 
-		RequestContext request = RequestContext
-				.builder()
-				.returnPolicyIdList(false)
-				.combineDecision(true)
-				.attributes(subject0, subject1, resource0, resource1)
-				.build();
+		RequestContext request = new RequestContext(false, true,
+				Arrays.asList(subject0, subject1, resource0, resource1));
 
 		Capture<RequestContext> c0 = new Capture<RequestContext>();
 		Capture<RequestContext> c1 = new Capture<RequestContext>();
@@ -260,12 +248,8 @@ public class MultipleResourcesHandlerTest
 	@Test
 	public void testRequestWithSingleResultCombine()
 	{
-		RequestContext request = RequestContext
-				.builder()
-				.returnPolicyIdList(false)
-				.combineDecision(true)
-				.attributes(subject0, resource0)
-				.build();
+		RequestContext request = new RequestContext(false, true,
+				Arrays.asList(subject0, resource0));
 
 		Capture<RequestContext> c0 = new Capture<RequestContext>();
 
@@ -285,11 +269,8 @@ public class MultipleResourcesHandlerTest
 	@Test
 	public void testWithEmptyRequest()
 	{
-		RequestContext request = RequestContext
-				.builder()
-				.returnPolicyIdList(false)
-				.combineDecision(true)
-				.build();
+		RequestContext request = new RequestContext(false, true,
+				Collections.<Category>emptyList());
 
 		Capture<RequestContext> c0 = new Capture<RequestContext>();
 

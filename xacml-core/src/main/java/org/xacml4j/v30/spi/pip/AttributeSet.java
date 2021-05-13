@@ -28,7 +28,6 @@ import java.util.Map.Entry;
 import org.xacml4j.v30.AttributeDesignatorKey;
 import org.xacml4j.v30.BagOfAttributeExp;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Ticker;
@@ -36,16 +35,14 @@ import com.google.common.collect.ImmutableMap;
 
 public final class AttributeSet
 {
-	private final long timestamp;
-	private final ImmutableMap<String, BagOfAttributeExp> values;
-	private final AttributeResolverDescriptor d;
-	private final int hashCode;
+	private long timestamp;
+	private ImmutableMap<String, BagOfAttributeExp> values;
+	private AttributeResolverDescriptor d;
 
 	private AttributeSet(Builder b){
 		this.d = b.d;
 		this.values = b.mapBuilder.build();
 		this.timestamp = b.ticker.read();
-		this.hashCode = Objects.hashCode(d, values);
 	}
 
 	public static Builder builder(AttributeResolverDescriptor d){
@@ -93,7 +90,7 @@ public final class AttributeSet
 	 *
 	 * @param key an attribute designator
 	 * @return {@link BagOfAttributeExp}
-	 * @exception IllegalArgumentException if the attribute designator cannot be resolved
+	 * @exception IllegalArgumentException
 	 */
 	public BagOfAttributeExp get(AttributeDesignatorKey key)
 	{
@@ -123,11 +120,12 @@ public final class AttributeSet
 		return d.getProvidedAttributeIds();
 	}
 
-	public boolean isEmpty() {
-		for (BagOfAttributeExp v : values.values()) {
-			if (!v.isEmpty()) {
-				return false;
+	public boolean isEmpty(){
+		for(BagOfAttributeExp v : values.values()){
+			if(v.isEmpty()){
+				continue;
 			}
+			return false;
 		}
 		return true;
 	}
@@ -142,16 +140,16 @@ public final class AttributeSet
 
 	@Override
 	public String toString(){
-		return MoreObjects.toStringHelper(this)
-		                  .add("id", d.getId())
-		                  .add("issuer", d.getIssuer())
-		                  .add("values", values)
-		                  .toString();
+		return Objects.toStringHelper(this)
+		.add("id", d.getId())
+		.add("issuer", d.getIssuer())
+		.add("values", values)
+		.toString();
 	}
 
 	@Override
 	public int hashCode(){
-		return hashCode;
+		return Objects.hashCode(d, values);
 	}
 
 	public static class Builder

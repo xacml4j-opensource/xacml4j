@@ -44,7 +44,7 @@ public abstract class BaseCalendar <T extends BaseCalendar<?>>
 	static{
 		try{
 			df = DatatypeFactory.newInstance();
-		}catch(DatatypeConfigurationException ignored){
+		}catch(DatatypeConfigurationException e){
 		}
 	}
 

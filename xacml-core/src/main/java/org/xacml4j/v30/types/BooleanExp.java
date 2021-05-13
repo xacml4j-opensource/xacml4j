@@ -38,11 +38,11 @@ public final class BooleanExp extends
 		super(XacmlTypes.BOOLEAN, value);
 	}
 	
-	public static BooleanExp of(boolean val){
+	public static BooleanExp create(boolean val){
 		return val?TRUE:FALSE;
 	}
 	
-	public static BooleanExp of(String v){
+	public static BooleanExp valueOf(String v){
 		return Boolean.parseBoolean(v)?BooleanExp.TRUE:BooleanExp.FALSE;
 	}
 	
@@ -52,7 +52,7 @@ public final class BooleanExp extends
 	}
 	
 	public StringExp toStringExp(){
-		return StringExp.of(Boolean.toString(getValue()));
+		return StringExp.valueOf(Boolean.toString(getValue()));
 	}
 	
 	public static BagOfAttributeExp emptyBag(){

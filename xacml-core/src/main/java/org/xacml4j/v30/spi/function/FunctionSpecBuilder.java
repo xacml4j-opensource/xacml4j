@@ -40,7 +40,7 @@ import org.xacml4j.v30.pdp.FunctionInvocationException;
 import org.xacml4j.v30.pdp.FunctionParamSpec;
 import org.xacml4j.v30.pdp.FunctionSpec;
 
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
 
@@ -273,7 +273,7 @@ public final class FunctionSpecBuilder
 
 		@Override
 		public boolean isVariadic(){
-			return !parameters.isEmpty() && parameters.get(parameters.size() - 1).isVariadic();
+			return parameters.isEmpty()?false:parameters.get(parameters.size() - 1).isVariadic();
 		}
 
 		@Override
@@ -536,17 +536,17 @@ public final class FunctionSpecBuilder
 		 * according specification
 		 */
 		private boolean validateAdditional(List<Expression> arguments){
-			return (validator == null) || validator.validate(this, arguments);
+			return (validator == null)?true:validator.validate(this, arguments);
 		}
 
 		@Override
 		public String toString(){
-			return MoreObjects.toStringHelper(this)
-			                  .add("functionId", functionId)
-			                  .add("legacyId", legacyId)
-			                  .add("evaluateParams", evaluateParameters)
-			                  .add("params", parameters)
-			                  .toString();
+			return Objects.toStringHelper(this)
+					.add("functionId", functionId)
+					.add("legacyId", legacyId)
+					.add("evaluateParams", evaluateParameters)
+					.add("params", parameters)
+					.toString();
 		}
 
 		@Override

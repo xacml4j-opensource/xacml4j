@@ -40,7 +40,6 @@ public interface PolicyDecisionCallback
 	 * Requests a decision for a given request
 	 * from a policy decision point
 	 *
-	 * @param context  PDP context
 	 * @param request a decision request
 	 * @return {@link Result} a decision result
 	 */

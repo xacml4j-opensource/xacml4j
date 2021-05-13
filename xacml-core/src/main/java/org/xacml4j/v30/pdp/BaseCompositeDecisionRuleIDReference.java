@@ -26,7 +26,6 @@ import org.xacml4j.v30.CompositeDecisionRuleIDReference;
 import org.xacml4j.v30.Version;
 import org.xacml4j.v30.VersionMatch;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -103,11 +102,11 @@ public abstract class BaseCompositeDecisionRuleIDReference
 
 	@Override
 	public final String toString() {
-		return MoreObjects.toStringHelper(this)
-		                  .add("id", id)
-		                  .add("version", version)
-		                  .add("earliest", earliest)
-		                  .add("latest", latest).toString();
+		return Objects.toStringHelper(this)
+		.add("id", id)
+		.add("version", version)
+		.add("earliest", earliest)
+		.add("latest", latest).toString();
 	}
 
 	@Override
@@ -164,7 +163,6 @@ public abstract class BaseCompositeDecisionRuleIDReference
 		 * latest version is set to {@code null}
 		 *
 		 * @param version a latest version textual representation
-		 * @return latest version reference
 		 */
 		public T latest(String version){
 			if(Strings.isNullOrEmpty(version)){

@@ -10,12 +10,12 @@ package org.xacml4j.v30.spi.function;
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Lesser Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Lesser Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
@@ -57,7 +57,7 @@ public final class TestFunctions
 	public static IntegerExp test2(
 			@XacmlFuncParam(typeId="http://www.w3.org/2001/XMLSchema#integer", isBag=true)BagOfAttributeExp bag)
 	{
-		return IntegerExp.of(bag.size());
+		return IntegerExp.valueOf(bag.size());
 	}
 
 	@XacmlFuncSpec(id="test3", evaluateArguments=false)
@@ -72,7 +72,7 @@ public final class TestFunctions
 			v += ((IntegerExp)e.evaluate(context)).getValue();
 
 		}
-		return IntegerExp.of(v);
+		return IntegerExp.valueOf(v);
 	}
 
 	@XacmlFuncSpec(id="test4", evaluateArguments=false)
@@ -87,7 +87,7 @@ public final class TestFunctions
 			v += ((IntegerExp)e.evaluate(context)).getValue();
 
 		}
-		return IntegerExp.of(v);
+		return IntegerExp.valueOf(v);
 	}
 
 	@XacmlFuncSpec(id="test5")
